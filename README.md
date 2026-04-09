@@ -22,6 +22,8 @@ This is v3 of the Links project: feneky.com (slash) links
 
 ## Content Schema
 
+This application depends on the remote resource of "favorites" on github, but as a fallback has locally cached content
+
 Each link entry in `src/content/*.json` uses this shape:
 
 ```json
