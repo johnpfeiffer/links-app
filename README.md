@@ -5,6 +5,14 @@ This is v3 of the Links project: feneky.com (slash) links
 # File Layout
 
 - `docs/`: product requirements (`requirements-v1.md` through `requirements-v6.md`).
+- `cloud-deploy.sh`: deploys the `app/` directory to the hosting repo.
+- `app/`: the deployable application (see below).
+
+## App Directory (`app/`)
+
+- `index.html`: HTML entry point.
+- `package.json`: dependencies and scripts.
+- `vite.config.js`: Vite build configuration.
 - `src/index.jsx`: app entry point (mounts React).
 - `src/App.jsx`: router + theme; wires the top-level routes.
 - `src/components/`: UI modules (e.g., `HomePage.jsx`, `SourcesPage.jsx`, `LinksSection.jsx`).
@@ -28,6 +36,7 @@ Each link entry in `src/content/*.json` uses this shape:
 ## Development
 
 ```bash
+cd app
 npm install
 npm run dev
 ```
@@ -35,6 +44,7 @@ npm run dev
 ## Testing
 
 ```bash
+cd app
 npm test
 npm run test:vitest
 ```
