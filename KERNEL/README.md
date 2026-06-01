@@ -71,3 +71,15 @@ flowchart TD
 # Reminder
  In reading the requirements files and this README, are there important things the in the existing architecture, what the code is doing, or how the application is arranged/displayed that need to be documented?
 
+
+
+# TLA+ and INVARIANTS
+
+(brew install openjdk)
+
+uv init --bare
+uv add --dev tlaplus-cli
+uv run tla --version
+uv run tla tools install
+
+
