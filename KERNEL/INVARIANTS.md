@@ -2,7 +2,7 @@
 
 Invariants are properties that must remain true across all derived artifacts and implementation work.
 
-## INV-001: `links` is a set of `link` records, each with exactly the fields id, url, title (strings) and tags (a set of strings).
+## INV-001: `links` is a set of `link` records, each with exactly the fields id, url, title (strings) and tags (a set of strings), and published (see INV-013), and description (see INV-014)
 
 ## INV-002: Unique id: no two distinct links share an id.
 
@@ -34,7 +34,12 @@ A Link is a member of a Source if and only if the Link has a valid URL, its cano
 A Source count equals the count of member Links. Only Sources with count greater than zero are included in a given view.
 
 ## INV-013: Published attribute
-- Every link includes a "published" field, when it is unknown set published to "null"
+- Every link includes a "published" field, when it is unknown or invalid, set published to null
 - "published" is an ISO 8601 date string (e.g. "2024-06-28" or "2024-06-28T15:04:05Z")
 - "published" is separate from "createdAt" (ingest time) and does not affect ids.
+
+## INV-014: Description attribute
+- Every Link has a non-empty, trimmed description.
+- If a year can be derived from published, the description ends with, exactly once, that year as a single (YYYY) suffix.
+- The description never ends with a repeated (YYYY) suffix.
 
