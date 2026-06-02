@@ -20,7 +20,7 @@ This directory is AI-derived from `/KERNEL/` and is not authoritative. If any st
 
 - `links-domain-spec.md`: product/domain interpretation of the kernel.
 - `implementation-plan.md`: red/green implementation and documentation plan.
-- `tla/LinksKernel.tla`: TLA+ specification traced to `INV-001` through `INV-014`.
+- `tla/LinksKernel.tla`: TLA+ specification traced to `INV-001` through `INV-016`.
 - `tla/LinksKernelModelData.tla`: literal TLC test data.
 - `tla/LinksKernelAll.tla` and `tla/LinksKernelAll.cfg`: TLC model for the default no-filter links view.
 - `tla/LinksKernelFiltered.tla` and `tla/LinksKernelFiltered.cfg`: TLC model for a filtered links view.
@@ -30,20 +30,22 @@ This directory is AI-derived from `/KERNEL/` and is not authoritative. If any st
 
 The current kernel invariants define:
 
-- `INV-001`: Loaded link records have exactly `id`, `url`, `title`, `tags`, `published`, and `description`.
+- `INV-001`: Loaded link records have exactly `id`, `url`, `title`, `tags`, `published`, `description`, and `alternate-url`.
 - `INV-002`: Link ids are unique.
 - `INV-003`: Required link and tag values are non-empty.
-- `INV-004`: Presented tags are link-connected unless they are favorite tags.
+- `INV-004`: Presented tags are link-connected unless they are favorite tags, including `Book`.
 - `INV-005`: Tag labels normalize into idempotent URL slugs.
 - `INV-006`: Slugs identify at most one tag and selected URL slugs do not duplicate.
-- `INV-007`: A link is included when it matches at least one selected tag.
+- `INV-007`: A link is included when it contains every selected tag.
 - `INV-008`: With no selected tags, all links are included.
-- `INV-009`: Route namespaces precede selected tag slugs.
-- `INV-010`: Sources derive from valid link URLs with `www.` stripped.
-- `INV-011`: Source membership is exact over currently included links.
-- `INV-012`: Source counts equal member counts, and zero-count sources are excluded.
-- `INV-013`: Every link has `published`, either `null` or an ISO 8601 date string.
-- `INV-014`: Every link has a non-empty trimmed `description` with published year suffix behavior.
+- `INV-009`: Links count equals the count of unique included links.
+- `INV-010`: Route namespaces precede selected tag slugs.
+- `INV-011`: Sources derive from valid link URLs with `www.` stripped.
+- `INV-012`: Source membership is exact over currently included links.
+- `INV-013`: Source counts equal member counts, and zero-count sources are excluded.
+- `INV-014`: Every link has `published`, either `null` or an ISO 8601 date string.
+- `INV-015`: Every link has a non-empty trimmed `description` with published year suffix behavior.
+- `INV-016`: Every link has `alternate-url`, either a URL or an empty string.
 
 ## Scope Note
 

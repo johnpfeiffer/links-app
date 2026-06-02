@@ -11,7 +11,8 @@ ModelLinks == {
     title |-> "Architecture Notes",
     tags |-> {"Engineering", "Architecture"},
     published |-> "2022-06-01",
-    description |-> "Architecture Notes (2022)"
+    description |-> "Architecture Notes (2022)",
+    alternateUrl |-> "https://alt.example.com/architecture"
   ],
   [
     id |-> "link-2",
@@ -19,7 +20,8 @@ ModelLinks == {
     title |-> "AI Podcast",
     tags |-> {"AI", "Podcast"},
     published |-> "2024-06-28T15:04:05Z",
-    description |-> "AI Podcast (2024)"
+    description |-> "AI Podcast (2024)",
+    alternateUrl |-> ""
   ],
   [
     id |-> "link-3",
@@ -27,15 +29,22 @@ ModelLinks == {
     title |-> "People History",
     tags |-> {"People", "History"},
     published |-> ModelNull,
-    description |-> "People History"
+    description |-> "People History",
+    alternateUrl |-> ""
   ]
 }
 
 SelectedSlugsAll == {}
 
-SelectedSlugsFiltered == {"engineering"}
+SelectedSlugsFiltered == {"engineering", "architecture"}
 
 SelectedSlugsSources == {"ai"}
+
+DisplayedLinkCountAll == 3
+
+DisplayedLinkCountFiltered == 1
+
+DisplayedLinkCountSources == 1
 
 RouteDefault == "default"
 

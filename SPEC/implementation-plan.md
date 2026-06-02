@@ -4,7 +4,7 @@ This plan is derived from `/KERNEL/` and assumes `/KERNEL/` remains immutable.
 
 ## 1. Kernel Alignment
 
-The current kernel is internally aligned around a loaded `Link` shape with `id`, `url`, `title`, `tags`, `published`, and `description`.
+The current kernel is internally aligned around a loaded `Link` shape with `id`, `url`, `title`, `tags`, `published`, `description`, and `alternate-url`.
 
 Implementation work should treat `createdAt` as non-invariant ingest/runtime metadata unless the kernel is changed to include it. It must not affect ids, selected links, source membership, source counts, or published/description behavior.
 
@@ -14,20 +14,23 @@ Use concise table-driven tests where practical.
 
 | Area | Red test first | Green implementation |
 | --- | --- | --- |
-| Link shape | loaded links expose `id`, `url`, `title`, `tags`, `published`, `description` | centralize construction/validation in `models/link` |
+| Link shape | loaded links expose `id`, `url`, `title`, `tags`, `published`, `description`, `alternate-url` | centralize construction/validation in `models/link` |
 | Link required fields | rejects records missing non-empty `url`, `title`, or tags | normalize or skip invalid source records |
 | Link ids | duplicate ids are detected or prevented | enforce unique ids in collection loading |
 | Published | unknown and invalid values normalize to null | validate/normalize in the Link model |
 | Published | known values preserve ISO 8601 strings | validate ISO date strings before storing |
 | Description | missing or blank description derives from title | generate during Link initialization |
 | Description | published year suffix is appended once | keep suffix appending idempotent |
+| Alternate URL | missing alternate URL normalizes to empty string | normalize during Link initialization |
+| Alternate URL | non-empty alternate URL is URL-like | validate or normalize invalid values to empty string |
 | Tag normalization | case, whitespace, punctuation, and idempotence examples | centralize normalization in `models/tag` |
-| Favorite tags | favorite tags may render without backing links | represent favorites separately from loaded link tags |
+| Favorite tags | favorite tags including `Book` may render without backing links | represent favorites separately from loaded link tags |
 | Slug uniqueness | two labels normalizing to the same slug are not both accepted silently | canonical tag collection rejects or warns |
 | URL parsing | `/`, `/tags`, and `/sources` route namespaces are parsed distinctly | parse namespace before selected slugs |
 | URL parsing | mixed case and duplicate selected segments canonicalize to unique lowercase slugs | parse path into a slug set |
 | Filtering | no selected tags includes all links | filtering uses selected slug set |
-| Filtering | selected tags include links with at least one matching tag | compare selected slugs with normalized link tag labels |
+| Filtering | selected tags include links containing every selected tag | compare selected slugs with normalized link tag labels |
+| Links count | displayed count equals the unique included link count | derive count from included link collection |
 | Sources | invalid URLs produce no source | guard URL parsing |
 | Sources | source domain strips leading `www.` | canonicalize domain in a model/helper layer |
 | Sources | membership is exact over currently included links | aggregate after filtering |

@@ -6,7 +6,7 @@ This specification is derived from `/KERNEL/` and must not override it.
 
 ### Link
 
-Trace: `INV-001`, `INV-002`, `INV-003`, `INV-013`, `INV-014`
+Trace: `INV-001`, `INV-002`, `INV-003`, `INV-014`, `INV-015`, `INV-016`
 
 A loaded invariant `Link` is a record with exactly these fields:
 
@@ -16,6 +16,7 @@ A loaded invariant `Link` is a record with exactly these fields:
 - `tags`: non-empty set of non-empty strings.
 - `published`: `null` when unknown, otherwise an ISO 8601 date string.
 - `description`: non-empty trimmed string.
+- `alternate-url`: URL string when known, otherwise an empty string.
 
 If source data omits `description`, the loaded link derives it from `title`. If a year can be derived from `published`, the description ends with that year as a single ` (YYYY)` suffix.
 
@@ -40,11 +41,11 @@ Slug normalization is idempotent and must:
 
 Each slug identifies at most one tag label. Duplicate slugs in URL selection are invalid and should be canonicalized away rather than represented internally.
 
-Every presented tag must be connected to at least one loaded link unless it is one of the favorite tags: `AI`, `Business`, `Engineering`, `History`, `People`, `Podcast`.
+Every presented tag must be connected to at least one loaded link unless it is one of the favorite tags: `AI`, `Business`, `Engineering`, `History`, `People`, `Podcast`, `Book`.
 
 ## Routing And Selection
 
-Trace: `INV-006`, `INV-007`, `INV-008`, `INV-009`
+Trace: `INV-006`, `INV-007`, `INV-008`, `INV-009`, `INV-010`
 
 The URL drives the SPA.
 
@@ -55,13 +56,15 @@ The URL drives the SPA.
 - selected slugs are case-insensitive inputs and should be emitted in canonical lowercase form.
 - duplicate selected slugs should be removed from the canonical representation.
 
-When selected slugs are present, a link is included if at least one of its tag labels normalizes to one of the selected slugs.
+When selected slugs are present, a link is included if every selected slug matches one of its normalized tag labels.
 
 When no slugs are selected, all links are included.
 
+The Links View count equals the number of unique currently included links.
+
 ## Sources
 
-Trace: `INV-010`, `INV-011`, `INV-012`
+Trace: `INV-011`, `INV-012`, `INV-013`
 
 A `Source` is the canonical domain derived from a currently included link with a valid URL. Canonicalization strips a leading `www.` prefix. Invalid URLs do not produce Sources.
 
@@ -81,7 +84,7 @@ Derived from requirements v1 through v4:
 
 - asynchronously load link content.
 - show a loading state while content is pending.
-- show favorite/popular tags above all tags: `AI`, `Business`, `Engineering`, `History`, `People`, `Podcast`.
+- show favorite/popular tags above all tags: `AI`, `Business`, `Engineering`, `History`, `People`, `Podcast`, `Book`.
 - show all tags in an expandable section.
 - show enabled tags after plain text `Filtered by`.
 - show included link count before the list.
