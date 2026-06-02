@@ -26,8 +26,10 @@ Use concise table-driven tests where practical.
 | Tag normalization | case, whitespace, punctuation, and idempotence examples | centralize normalization in `models/tag` |
 | Favorite tags | favorite tags including `Book` may render without backing links | represent favorites separately from loaded link tags |
 | Slug uniqueness | two labels normalizing to the same slug are not both accepted silently | canonical tag collection rejects or warns |
-| URL parsing | `/`, `/tags`, and `/sources` route namespaces are parsed distinctly | parse namespace before selected slugs |
+| URL parsing | optional app name and `/tags` or `/sources` namespace are parsed distinctly | parse app name before namespace and slugs |
 | URL parsing | mixed case and duplicate selected segments canonicalize to unique lowercase slugs | parse path into a slug set |
+| URL generation | generated links preserve the current app name | include app base path before namespace |
+| URL redirect | app base route redirects to tags namespace | redirect `/APPNAME/` to `/APPNAME/tags` |
 | Filtering | no selected tags includes all links | filtering uses selected slug set |
 | Filtering | selected tags include links containing every selected tag | compare selected slugs with normalized link tag labels |
 | Links count | displayed count equals the unique included link count | derive count from included link collection |
@@ -48,7 +50,7 @@ flowchart TD
   B --> D["description derivation"]
   B --> E["Tag model normalization"]
   E --> F["Links collection"]
-  F --> G["URL namespace parser"]
+  F --> G["URL app-name and namespace parser"]
   G --> H["Selected slug set"]
   H --> I["Included links selector"]
   F --> I
@@ -61,13 +63,13 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-  A["User opens /"] --> B["Links View with no selected tags"]
+  A["User opens /APPNAME/"] --> B["Redirect to /APPNAME/tags"]
   B --> C["App loads and normalizes links"]
   C --> D["All links are included"]
   D --> E["User clicks a tag"]
-  E --> F["URL updates to /tags/{slug}"]
+  E --> F["URL updates to /APPNAME/tags/{slug}"]
   F --> G["Included links are recalculated"]
-  G --> H["User opens /sources/{slug}"]
+  G --> H["User opens /APPNAME/sources/{slug}"]
   H --> I["Sources are built from currently included valid links"]
   I --> J["User expands a source"]
   J --> K["Source links display by published date, null last"]

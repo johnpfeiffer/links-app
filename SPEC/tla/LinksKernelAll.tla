@@ -1,16 +1,23 @@
 ----------------------------- MODULE LinksKernelAll ---------------------------
 EXTENDS LinksKernelModelData
 
-VARIABLES links, selectedSlugs, routeNamespace, displayedLinkCount
+VARIABLES links, selectedSlugs, appName, routeNamespace, displayedLinkCount,
+          isAppBaseRoute, canonicalPath
 
 INSTANCE LinksKernel
   WITH links <- links,
        selectedSlugs <- selectedSlugs,
+       appName <- appName,
        routeNamespace <- routeNamespace,
        displayedLinkCount <- displayedLinkCount,
+       isAppBaseRoute <- isAppBaseRoute,
+       canonicalPath <- canonicalPath,
        InitialLinks <- ModelLinks,
        InitialSelectedSlugs <- SelectedSlugsAll,
+       InitialAppName <- AppNameLinks,
        InitialRouteNamespace <- RouteDefault,
-       InitialDisplayedLinkCount <- DisplayedLinkCountAll
+       InitialDisplayedLinkCount <- DisplayedLinkCountAll,
+       InitialIsAppBaseRoute <- IsAppBaseRouteTrue,
+       InitialCanonicalPath <- CanonicalPathAll
 
 =============================================================================

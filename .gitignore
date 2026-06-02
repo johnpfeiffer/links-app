@@ -1,3 +1,6 @@
+# TLA output
+SPEC/tla/states/
+
 # Dependencies
 node_modules/
 

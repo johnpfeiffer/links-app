@@ -46,10 +46,24 @@ DisplayedLinkCountFiltered == 1
 
 DisplayedLinkCountSources == 1
 
+AppNameEmpty == ""
+
+AppNameLinks == "links"
+
 RouteDefault == "default"
 
 RouteTags == "tags"
 
 RouteSources == "sources"
+
+IsAppBaseRouteTrue == TRUE
+
+IsAppBaseRouteFalse == FALSE
+
+CanonicalPathAll == "/links/tags"
+
+CanonicalPathFiltered == "/links/tags/selected"
+
+CanonicalPathSources == "/links/sources/selected"
 
 =============================================================================

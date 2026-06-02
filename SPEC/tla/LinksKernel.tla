@@ -6,12 +6,15 @@ EXTENDS Naturals, FiniteSets, TLC
 \* the corresponding kernel invariant. Init, Next, and Spec are TLC harness
 \* operators only.
 
-CONSTANTS InitialLinks, InitialSelectedSlugs, InitialRouteNamespace,
-          InitialDisplayedLinkCount
+CONSTANTS InitialLinks, InitialSelectedSlugs, InitialAppName,
+          InitialRouteNamespace, InitialDisplayedLinkCount,
+          InitialIsAppBaseRoute, InitialCanonicalPath
 
-VARIABLES links, selectedSlugs, routeNamespace, displayedLinkCount
+VARIABLES links, selectedSlugs, appName, routeNamespace, displayedLinkCount,
+          isAppBaseRoute, canonicalPath
 
-vars == <<links, selectedSlugs, routeNamespace, displayedLinkCount>>
+vars == <<links, selectedSlugs, appName, routeNamespace, displayedLinkCount,
+          isAppBaseRoute, canonicalPath>>
 
 \* TLC model sentinel for kernel null.
 NullValue == "__NULL__"
@@ -20,6 +23,20 @@ FavoriteTagLabels ==
   {"AI", "Business", "Engineering", "History", "People", "Podcast", "Book"}
 
 RouteNamespaces == {"default", "tags", "sources"}
+
+AppNames == {"", "links"}
+
+CanonicalPaths ==
+  {
+    "/tags",
+    "/tags/selected",
+    "/sources",
+    "/sources/selected",
+    "/links/tags",
+    "/links/tags/selected",
+    "/links/sources",
+    "/links/sources/selected"
+  }
 
 TagLabels == UNION { link.tags : link \in links }
 
@@ -113,11 +130,26 @@ SourceMembers(source) ==
 
 SourceCount(source) == Cardinality(SourceMembers(source))
 
+ExpectedNamespacePath ==
+  CASE appName = "" /\ routeNamespace = "tags" /\ selectedSlugs = {} -> "/tags"
+    [] appName = "" /\ routeNamespace = "tags" /\ selectedSlugs # {} -> "/tags/selected"
+    [] appName = "" /\ routeNamespace = "sources" /\ selectedSlugs = {} -> "/sources"
+    [] appName = "" /\ routeNamespace = "sources" /\ selectedSlugs # {} -> "/sources/selected"
+    [] appName = "links" /\ routeNamespace = "tags" /\ selectedSlugs = {} -> "/links/tags"
+    [] appName = "links" /\ routeNamespace = "tags" /\ selectedSlugs # {} -> "/links/tags/selected"
+    [] appName = "links" /\ routeNamespace = "sources" /\ selectedSlugs = {} -> "/links/sources"
+    [] appName = "links" /\ routeNamespace = "sources" /\ selectedSlugs # {} -> "/links/sources/selected"
+    [] appName = "" -> "/tags"
+    [] OTHER -> "/links/tags"
+
 Init ==
   /\ links = InitialLinks
   /\ selectedSlugs = InitialSelectedSlugs
+  /\ appName = InitialAppName
   /\ routeNamespace = InitialRouteNamespace
   /\ displayedLinkCount = InitialDisplayedLinkCount
+  /\ isAppBaseRoute = InitialIsAppBaseRoute
+  /\ canonicalPath = InitialCanonicalPath
 
 Next == UNCHANGED vars
 
@@ -190,11 +222,16 @@ INV008 ==
 INV009 ==
   displayedLinkCount = Cardinality(IncludedLinks)
 
-\* INV-010: route namespaces precede selected slugs. The default route has no
-\* selected tags.
+\* INV-010: application URLs include an optional application name before the
+\* route namespace; the app base route redirects to the tags namespace.
 INV010 ==
+  /\ appName \in AppNames
   /\ routeNamespace \in RouteNamespaces
-  /\ routeNamespace = "default" => selectedSlugs = {}
+  /\ canonicalPath \in CanonicalPaths
+  /\ isAppBaseRoute => /\ routeNamespace = "default"
+                       /\ selectedSlugs = {}
+                       /\ canonicalPath = ExpectedNamespacePath
+  /\ ~isAppBaseRoute => canonicalPath = ExpectedNamespacePath
 
 \* INV-011: sources are canonical domains derived from valid included link URLs;
 \* invalid URLs do not produce sources.

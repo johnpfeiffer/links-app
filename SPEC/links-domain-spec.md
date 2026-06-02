@@ -47,14 +47,33 @@ Every presented tag must be connected to at least one loaded link unless it is o
 
 Trace: `INV-006`, `INV-007`, `INV-008`, `INV-009`, `INV-010`
 
-The URL drives the SPA.
+The URL drives the SPA and is structured as:
 
-- `/` identifies the Links View with no selected tags.
+`DOMAIN / optional APPLICATIONNAME / NAMESPACE / optional selected tag slugs`
+
+- `DOMAIN` is the host, such as `example.com`.
+- `APPLICATIONNAME` is the deployed app name, such as `links`; it may be empty.
+- a namespace appears only after `DOMAIN/APPLICATIONNAME`.
+- when `APPLICATIONNAME` is empty, the namespace follows the domain root directly.
+- the app base route redirects to the `/tags` namespace.
 - `/tags` identifies the Links View.
 - `/sources` identifies the Sources View.
 - route segments after the namespace are selected tag slugs.
 - selected slugs are case-insensitive inputs and should be emitted in canonical lowercase form.
 - duplicate selected slugs should be removed from the canonical representation.
+- generated navigation links must preserve the current `APPLICATIONNAME`.
+
+Examples for `APPLICATIONNAME = links`:
+
+- `/links/` redirects to `/links/tags`.
+- `/links/tags/ai/podcast` identifies the Links View with selected slugs `ai` and `podcast`.
+- `/links/sources/ai/podcast` identifies the Sources View with selected slugs `ai` and `podcast`.
+
+Examples for empty `APPLICATIONNAME`:
+
+- `/` redirects to `/tags`.
+- `/tags/ai/podcast` identifies the Links View.
+- `/sources/ai/podcast` identifies the Sources View.
 
 When selected slugs are present, a link is included if every selected slug matches one of its normalized tag labels.
 
@@ -96,7 +115,7 @@ Derived from requirements v1 through v4:
 
 Derived from requirements v5 and v6:
 
-- route namespace: `/sources`.
+- route namespace: `/sources`, after any application name.
 - aggregate currently included valid links by canonical source domain.
 - sort domains by link count descending.
 - show rank number and link count for each domain.

@@ -39,7 +39,7 @@ The current kernel invariants define:
 - `INV-007`: A link is included when it contains every selected tag.
 - `INV-008`: With no selected tags, all links are included.
 - `INV-009`: Links count equals the count of unique included links.
-- `INV-010`: Route namespaces precede selected tag slugs.
+- `INV-010`: Application URLs have an optional application name before the route namespace.
 - `INV-011`: Sources derive from valid link URLs with `www.` stripped.
 - `INV-012`: Source membership is exact over currently included links.
 - `INV-013`: Source counts equal member counts, and zero-count sources are excluded.

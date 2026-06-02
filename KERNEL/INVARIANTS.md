@@ -22,10 +22,15 @@ Invariants are properties that must remain true across all derived artifacts and
 ## INV-009: Links count is exactly the count of unique links included by tag selection.
 
 ## INV-010: There are application URL route namespaces that precede any slugs
-- `/tags` identifies the Links View
-- `/sources` identifies the Sources View
+Application URLs are structured like: `DOMAIN / optional APPLICATIONNAME / NAMESPACE / optional selected tag slugs`
+- There is the Application's domain like "example.com"
+- There is an Application name like "links", or the application name can be empty
+- A namespace only appears after DOMAIN/APPLICATIONNAME , thus DOMAIN/APPLICATIONNAME/NAMESPACE
+- When AppName is empty, the namespace follows the domain root directly — DOMAIN/NAMESPACE/slugs
+- The default route `/` should automatically redirect to the /tags namespace
+- `/tags` identifies the tags namespace which is the Links View
+- `/sources` identifies the sources namespace which is the Sources View
 - Route segments after the namespace are interpreted as selected tag slugs.
-- The default route `/` identifies the Links View with no selected tags.
 
 ## INV-011: Sources are derived from valid Link URLs.
 A Source is the canonical domain derived from one or more valid Link URLs. Canonicalization strips a leading `www.` prefix. Invalid URLs do not produce Sources.
