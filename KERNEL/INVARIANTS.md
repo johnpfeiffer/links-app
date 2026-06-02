@@ -3,7 +3,7 @@
 Invariants are properties that must remain true across all derived artifacts and implementation work.
 
 ## INV-001: `links` is a set of `link` records, each with exactly the fields id, url, title (strings) and tags (a set of strings),
- and published (see INV-013), and description (see INV-014), and alternate-url (see INV-015)
+ and published (see INV-014), and description (see INV-014), and alternate-url (see INV-016)
 
 ## INV-002: Unique id: no two distinct links share an id.
 
@@ -19,31 +19,33 @@ Invariants are properties that must remain true across all derived artifacts and
 
 ## INV-008: When no tags are selected, all links are included.
 
-## INV-009: There are application URL route namespaces that precede any slugs
+## INV-009: Links count is exactly the count of unique links included by tag selection.
+
+## INV-010: There are application URL route namespaces that precede any slugs
 - `/tags` identifies the Links View
 - `/sources` identifies the Sources View
 - Route segments after the namespace are interpreted as selected tag slugs.
 - The default route `/` identifies the Links View with no selected tags.
 
-## INV-010: Sources are derived from valid Link URLs.
+## INV-011: Sources are derived from valid Link URLs.
 A Source is the canonical domain derived from one or more valid Link URLs. Canonicalization strips a leading `www.` prefix. Invalid URLs do not produce Sources.
 
-## INV-011: Source membership
+## INV-012: Source membership
 A Link is a member of a Source if and only if the Link has a valid URL, its canonical domain equals that Source, and if it is currently included (INV-007 or INV-008).
 
-## INV-012: Source count and inclusion
+## INV-013: Source count and inclusion
 A Source count equals the count of member Links. Only Sources with count greater than zero are included in a given view.
 
-## INV-013: Published attribute
+## INV-014: Published attribute
 - Every link includes a "published" field, when it is unknown or invalid, set published to null
 - "published" is an ISO 8601 date string (e.g. "2024-06-28" or "2024-06-28T15:04:05Z")
 - "published" is separate from "createdAt" (ingest time) and does not affect ids.
 
-## INV-014: Description attribute
+## INV-015: Description attribute
 - Every Link has a non-empty, trimmed description.
 - If a year can be derived from published, the description ends with, exactly once, that year as a single (YYYY) suffix.
 - The description never ends with a repeated (YYYY) suffix.
 
-## INV-015: Alternate-URL attribute
+## INV-016: Alternate-URL attribute
 - Every link has an Alternate-URL field that can be a url or an empty string
 
