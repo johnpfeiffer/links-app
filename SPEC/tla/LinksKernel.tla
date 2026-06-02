@@ -1,18 +1,28 @@
 ----------------------------- MODULE LinksKernel -----------------------------
-EXTENDS Naturals, TLC
+EXTENDS Naturals, FiniteSets, TLC
 
 \* Derived from /KERNEL/INVARIANTS.md.
-\* Business predicates are named INV001 through INV008 and trace directly to
+\* Business predicates are named INV001 through INV014 and trace directly to
 \* the corresponding kernel invariant. Init, Next, and Spec are TLC harness
 \* operators only.
 
-CONSTANTS InitialLinks, InitialSelectedSlugs
+CONSTANTS InitialLinks, InitialSelectedSlugs, InitialRouteNamespace
 
-VARIABLES links, selectedSlugs
+VARIABLES links, selectedSlugs, routeNamespace
 
-vars == <<links, selectedSlugs>>
+vars == <<links, selectedSlugs, routeNamespace>>
+
+\* TLC model sentinel for kernel null.
+NullValue == "__NULL__"
+
+FavoriteTagLabels ==
+  {"AI", "Business", "Engineering", "History", "People", "Podcast"}
+
+RouteNamespaces == {"default", "tags", "sources"}
 
 TagLabels == UNION { link.tags : link \in links }
+
+PresentedTagLabels == TagLabels \cup FavoriteTagLabels
 
 \* Bounded normalization for the literal labels used by the TLC model files.
 \* This operator exists so model files contain only literal test data.
@@ -27,29 +37,92 @@ Normalize(label) ==
     [] label = "Example Tag" -> "example-tag"
     [] OTHER -> label
 
-VisibleLinks ==
+IncludedLinks ==
   IF selectedSlugs = {}
   THEN links
   ELSE { link \in links :
     \E label \in link.tags : Normalize(label) \in selectedSlugs
   }
 
+PublishedValues ==
+  {
+    NullValue,
+    "2022-06-01",
+    "2024-06-28T15:04:05Z",
+    "2020-10-15"
+  }
+
+IsIsoPublished(value) ==
+  value \in PublishedValues /\ value # NullValue
+
+PublishedYear(value) ==
+  CASE value = "2022-06-01" -> "2022"
+    [] value = "2024-06-28T15:04:05Z" -> "2024"
+    [] value = "2020-10-15" -> "2020"
+    [] OTHER -> NullValue
+
+TrimmedDescriptions ==
+  {
+    "Architecture Notes (2022)",
+    "AI Podcast (2024)",
+    "People History"
+  }
+
+DescriptionHasPublishedYearSuffix(description, published) ==
+  CASE PublishedYear(published) = "2022" -> description = "Architecture Notes (2022)"
+    [] PublishedYear(published) = "2024" -> description = "AI Podcast (2024)"
+    [] PublishedYear(published) = "2020" -> description = "People History (2020)"
+    [] OTHER -> TRUE
+
+HasRepeatedPublishedYearSuffix(description, published) ==
+  CASE PublishedYear(published) = "2022" -> description = "Architecture Notes (2022) (2022)"
+    [] PublishedYear(published) = "2024" -> description = "AI Podcast (2024) (2024)"
+    [] PublishedYear(published) = "2020" -> description = "People History (2020) (2020)"
+    [] OTHER -> FALSE
+
+CanonicalDomain(url) ==
+  CASE url = "https://www.example.com/architecture" -> "example.com"
+    [] url = "https://example.com/ai" -> "example.com"
+    [] OTHER -> NullValue
+
+ValidUrl(url) == CanonicalDomain(url) # NullValue
+
+SourceDomainUniverse == {"example.com"}
+
+Sources ==
+  { domain \in SourceDomainUniverse :
+    \E link \in IncludedLinks :
+      /\ ValidUrl(link.url)
+      /\ CanonicalDomain(link.url) = domain
+  }
+
+SourceMembers(source) ==
+  { link \in IncludedLinks :
+    /\ ValidUrl(link.url)
+    /\ CanonicalDomain(link.url) = source
+  }
+
+SourceCount(source) == Cardinality(SourceMembers(source))
+
 Init ==
   /\ links = InitialLinks
   /\ selectedSlugs = InitialSelectedSlugs
+  /\ routeNamespace = InitialRouteNamespace
 
 Next == UNCHANGED vars
 
 Spec == Init /\ [][Next]_vars
 
 \* INV-001: links is a set of link records, each with exactly id, url, title,
-\* and tags. id, url, title are strings; tags is a set of strings.
+\* tags, published, and description.
 INV001 ==
   links \in SUBSET [
     id: STRING,
     url: STRING,
     title: STRING,
-    tags: SUBSET STRING
+    tags: SUBSET STRING,
+    published: PublishedValues,
+    description: STRING
   ]
 
 \* INV-002: no two distinct links share an id.
@@ -66,14 +139,16 @@ INV003 ==
     /\ link.tags # {}
     /\ \A label \in link.tags : label # ""
 
-\* INV-004: every tag must be connected to a Link.
+\* INV-004: every presented tag is connected to a Link unless it is a favorite
+\* tag.
 INV004 ==
-  \A label \in TagLabels :
-    \E link \in links : label \in link.tags
+  \A label \in PresentedTagLabels :
+    \/ label \in FavoriteTagLabels
+    \/ \E link \in links : label \in link.tags
 
 \* INV-005: each tag's slug is the idempotent normalization of its label.
 INV005 ==
-  \A label \in TagLabels :
+  \A label \in PresentedTagLabels :
     /\ Normalize(label) \in STRING
     /\ Normalize(label) # ""
     /\ Normalize(Normalize(label)) = Normalize(label)
@@ -82,20 +157,67 @@ INV005 ==
 \* one-to-one with selected tags and cannot duplicate because selectedSlugs is
 \* modeled as a set.
 INV006 ==
-  /\ selectedSlugs \subseteq { Normalize(label) : label \in TagLabels }
-  /\ \A label1, label2 \in TagLabels :
+  /\ selectedSlugs \subseteq { Normalize(label) : label \in PresentedTagLabels }
+  /\ \A label1, label2 \in PresentedTagLabels :
     Normalize(label1) = Normalize(label2) => label1 = label2
 
-\* INV-007: when tags are selected, a link is shown iff it has at least one
+\* INV-007: when tags are selected, a link is included iff it has at least one
 \* selected tag.
 INV007 ==
   selectedSlugs # {} =>
     \A link \in links :
-      (link \in VisibleLinks) <=>
+      (link \in IncludedLinks) <=>
         (\E label \in link.tags : Normalize(label) \in selectedSlugs)
 
-\* INV-008: when no tags are selected, all links are shown.
+\* INV-008: when no tags are selected, all links are included.
 INV008 ==
-  selectedSlugs = {} => VisibleLinks = links
+  selectedSlugs = {} => IncludedLinks = links
+
+\* INV-009: route namespaces precede selected slugs. The default route has no
+\* selected tags.
+INV009 ==
+  /\ routeNamespace \in RouteNamespaces
+  /\ routeNamespace = "default" => selectedSlugs = {}
+
+\* INV-010: sources are canonical domains derived from valid included link URLs;
+\* invalid URLs do not produce sources.
+INV010 ==
+  Sources =
+    { domain \in SourceDomainUniverse :
+      \E link \in IncludedLinks :
+        /\ ValidUrl(link.url)
+        /\ CanonicalDomain(link.url) = domain
+    }
+
+\* INV-011: source membership is exact for valid currently included links.
+INV011 ==
+  \A source \in SourceDomainUniverse :
+    \A link \in links :
+      (link \in SourceMembers(source)) <=>
+        /\ link \in IncludedLinks
+        /\ ValidUrl(link.url)
+        /\ CanonicalDomain(link.url) = source
+
+\* INV-012: source count equals member count, and only positive-count sources
+\* are included in a view.
+INV012 ==
+  \A source \in SourceDomainUniverse :
+    /\ SourceCount(source) = Cardinality(SourceMembers(source))
+    /\ (source \in Sources) <=> SourceCount(source) > 0
+
+\* INV-013: every link has published as null or an ISO 8601 date string.
+INV013 ==
+  \A link \in links :
+    \/ link.published = NullValue
+    \/ IsIsoPublished(link.published)
+
+\* INV-014: every link has a non-empty trimmed description. If a year can be
+\* derived from published, the description ends with exactly one matching suffix.
+INV014 ==
+  \A link \in links :
+    /\ link.description \in TrimmedDescriptions
+    /\ link.description # ""
+    /\ DescriptionHasPublishedYearSuffix(link.description, link.published)
+    /\ ~HasRepeatedPublishedYearSuffix(link.description, link.published)
 
 =============================================================================

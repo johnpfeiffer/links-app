@@ -1,12 +1,14 @@
 ----------------------------- MODULE LinksKernelAll ---------------------------
 EXTENDS LinksKernelModelData
 
-VARIABLES links, selectedSlugs
+VARIABLES links, selectedSlugs, routeNamespace
 
 INSTANCE LinksKernel
   WITH links <- links,
        selectedSlugs <- selectedSlugs,
+       routeNamespace <- routeNamespace,
        InitialLinks <- ModelLinks,
-       InitialSelectedSlugs <- SelectedSlugsAll
+       InitialSelectedSlugs <- SelectedSlugsAll,
+       InitialRouteNamespace <- RouteDefault
 
 =============================================================================

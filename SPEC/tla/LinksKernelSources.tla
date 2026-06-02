@@ -1,4 +1,4 @@
--------------------------- MODULE LinksKernelFiltered -------------------------
+--------------------------- MODULE LinksKernelSources -------------------------
 EXTENDS LinksKernelModelData
 
 VARIABLES links, selectedSlugs, routeNamespace
@@ -8,7 +8,7 @@ INSTANCE LinksKernel
        selectedSlugs <- selectedSlugs,
        routeNamespace <- routeNamespace,
        InitialLinks <- ModelLinks,
-       InitialSelectedSlugs <- SelectedSlugsFiltered,
-       InitialRouteNamespace <- RouteTags
+       InitialSelectedSlugs <- SelectedSlugsSources,
+       InitialRouteNamespace <- RouteSources
 
 =============================================================================

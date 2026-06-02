@@ -2,18 +2,11 @@
 
 This plan is derived from `/KERNEL/` and assumes `/KERNEL/` remains immutable.
 
-## 1. Resolve Kernel Conflict
+## 1. Kernel Alignment
 
-Status: requires human clarification before implementation that changes the invariant-governed `Link` shape.
+The current kernel is internally aligned around a loaded `Link` shape with `id`, `url`, `title`, `tags`, `published`, and `description`.
 
-`INV-001` defines a link record with exactly `id`, `url`, `title`, and `tags`. `requirements-v6.md` asks to add `published` to every `Link`.
-
-Recommended human resolution options:
-
-- Update `INV-001` to include `published` as an optional or nullable field.
-- Reword `requirements-v6.md` so `published` is derived display metadata outside the invariant-governed `Link` record.
-
-Do not implement `published` as a fifth `Link` model field while `INV-001` remains unchanged.
+Implementation work should treat `createdAt` as non-invariant ingest/runtime metadata unless the kernel is changed to include it. It must not affect ids, selected links, source membership, source counts, or published/description behavior.
 
 ## 2. Red/Green Test Plan
 
@@ -21,18 +14,25 @@ Use concise table-driven tests where practical.
 
 | Area | Red test first | Green implementation |
 | --- | --- | --- |
-| Link model | rejects records missing `id`, `url`, `title`, or non-empty `tags` | centralize construction/validation in `models/link` |
+| Link shape | loaded links expose `id`, `url`, `title`, `tags`, `published`, `description` | centralize construction/validation in `models/link` |
+| Link required fields | rejects records missing non-empty `url`, `title`, or tags | normalize or skip invalid source records |
 | Link ids | duplicate ids are detected or prevented | enforce unique ids in collection loading |
+| Published | unknown and invalid values normalize to null | validate/normalize in the Link model |
+| Published | known values preserve ISO 8601 strings | validate ISO date strings before storing |
+| Description | missing or blank description derives from title | generate during Link initialization |
+| Description | published year suffix is appended once | keep suffix appending idempotent |
 | Tag normalization | case, whitespace, punctuation, and idempotence examples | centralize normalization in `models/tag` |
+| Favorite tags | favorite tags may render without backing links | represent favorites separately from loaded link tags |
 | Slug uniqueness | two labels normalizing to the same slug are not both accepted silently | canonical tag collection rejects or warns |
-| URL parsing | mixed case and duplicate segments canonicalize to unique lowercase slugs | parse path into slug set |
-| Filtering | no selected tags returns all links | filtering uses selected slug set |
-| Filtering | one selected tag returns links with at least one matching tag | compare selected slugs with normalized link tag labels |
-| Tag toggling | disabled tag appends slug; enabled tag removes all duplicate occurrences | generate canonical target paths |
-| Favorite tags | fixed tags render and behave like normal tags | render above all-tags section |
-| Sources view | groups by domain, strips `www.`, sorts by count | add domain aggregation model/helper |
-| Sources view | invalid URLs warn without crashing | guard URL parsing |
-| Sources date ordering | dates sort ascending and null last | implement only after `published` conflict is resolved |
+| URL parsing | `/`, `/tags`, and `/sources` route namespaces are parsed distinctly | parse namespace before selected slugs |
+| URL parsing | mixed case and duplicate selected segments canonicalize to unique lowercase slugs | parse path into a slug set |
+| Filtering | no selected tags includes all links | filtering uses selected slug set |
+| Filtering | selected tags include links with at least one matching tag | compare selected slugs with normalized link tag labels |
+| Sources | invalid URLs produce no source | guard URL parsing |
+| Sources | source domain strips leading `www.` | canonicalize domain in a model/helper layer |
+| Sources | membership is exact over currently included links | aggregate after filtering |
+| Sources | zero-count sources are excluded | filter source groups by member count |
+| Sources | links sort by published date ascending, null last | sort expanded source members by normalized published value |
 
 ## 3. Architecture Plan
 
@@ -41,33 +41,33 @@ Keep business rules in model/helper layers, not presentation components.
 ```mermaid
 flowchart TD
   A["JSON content sources"] --> B["Link model validation"]
-  B --> C["Tag model normalization"]
-  C --> D["Links collection"]
-  D --> E["URL path parser"]
-  E --> F["Selected slug set"]
-  F --> G["Visible links selector"]
-  D --> G
-  D --> H["Sources aggregation"]
-  G --> I["Home view components"]
-  H --> J["Sources view components"]
+  B --> C["published normalization"]
+  B --> D["description derivation"]
+  B --> E["Tag model normalization"]
+  E --> F["Links collection"]
+  F --> G["URL namespace parser"]
+  G --> H["Selected slug set"]
+  H --> I["Included links selector"]
+  F --> I
+  I --> J["Sources aggregation"]
+  I --> K["Links view components"]
+  J --> L["Sources view components"]
 ```
 
 ## 4. User Journey
 
 ```mermaid
 flowchart TD
-  A["User opens /links/"] --> B["App loads link content"]
-  B --> C["No selected tags"]
-  C --> D["All links are visible"]
+  A["User opens /"] --> B["Links View with no selected tags"]
+  B --> C["App loads and normalizes links"]
+  C --> D["All links are included"]
   D --> E["User clicks a tag"]
-  E --> F["URL updates with canonical slug"]
-  F --> G["Visible links are recalculated"]
-  G --> H["User clicks enabled tag"]
-  H --> I["Slug is removed from URL"]
-  I --> G
-  D --> J["User opens /sources"]
-  J --> K["Sources grouped and ranked by domain"]
-  K --> L["User expands a source"]
+  E --> F["URL updates to /tags/{slug}"]
+  F --> G["Included links are recalculated"]
+  G --> H["User opens /sources/{slug}"]
+  H --> I["Sources are built from currently included valid links"]
+  I --> J["User expands a source"]
+  J --> K["Source links display by published date, null last"]
 ```
 
 ## 5. Validation Gates

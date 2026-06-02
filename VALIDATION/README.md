@@ -17,12 +17,13 @@ Run from the repository root:
 cd KERNEL
 rtk uv run tla tlc ../SPEC/tla/LinksKernelAll
 rtk uv run tla tlc ../SPEC/tla/LinksKernelFiltered
+rtk uv run tla tlc ../SPEC/tla/LinksKernelSources
 ```
 
 Expected result:
 
 - TLC completes with all listed invariants satisfied.
-- TLC reports at least one generated state.
+- TLC reports at least one generated state for each model.
 
 ## App Checks
 
