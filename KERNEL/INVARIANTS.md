@@ -2,19 +2,20 @@
 
 Invariants are properties that must remain true across all derived artifacts and implementation work.
 
-## INV-001: `links` is a set of `link` records, each with exactly the fields id, url, title (strings) and tags (a set of strings), and published (see INV-013), and description (see INV-014)
+## INV-001: `links` is a set of `link` records, each with exactly the fields id, url, title (strings) and tags (a set of strings),
+ and published (see INV-013), and description (see INV-014), and alternate-url (see INV-015)
 
 ## INV-002: Unique id: no two distinct links share an id.
 
 ## INV-003: Required and non-empty: every link's id, url, and title are non-empty. It has at least one tag, and every tag (string) is non-empty.
 
-## INV-004: Every tag must be connected to a Link; unless it is part of the set of Favorite Tags: AI, Business, Engineering, History, People, Podcast
+## INV-004: Every tag must be connected to a Link; unless it is part of the set of Favorite Tags: AI, Business, Engineering, History, People, Podcast, Book
 
 ## INV-005 Each tag becomes a url slug: each tag's slug is the idempotent normalization of its label: lowercase, strip special characters, and replace whitespace with `-`.
 
 ## INV-006: a slug identifies at most one tag across the set of tags. The slugs in the URL and selected tags are in a one to one correspondence. Therefore a slug should not be duplicated in the URL.
 
-## INV-007: A link is included in the current selection if it has at least one of the selected tags. Selection can be through the slug or the UI.
+## INV-007: A link is included in the current selection if it contains every one of the selected tags. Selection can be through the slug or the UI.
 
 ## INV-008: When no tags are selected, all links are included.
 
@@ -42,4 +43,7 @@ A Source count equals the count of member Links. Only Sources with count greater
 - Every Link has a non-empty, trimmed description.
 - If a year can be derived from published, the description ends with, exactly once, that year as a single (YYYY) suffix.
 - The description never ends with a repeated (YYYY) suffix.
+
+## INV-015: Alternate-URL attribute
+- Every link has an Alternate-URL field that can be a url or an empty string
 
