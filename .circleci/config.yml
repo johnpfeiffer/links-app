@@ -1,0 +1,64 @@
+version: 2.1
+
+jobs:
+  validate:
+    docker:
+      - image: cimg/node:lts
+    working_directory: ~/project
+
+    steps:
+      - checkout
+      - run:
+          name: Install Java and uv
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y openjdk-17-jdk curl
+            curl -LsSf https://astral.sh/uv/install.sh | sh
+            echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$BASH_ENV"
+            source "$BASH_ENV"
+            java -version
+            uv --version
+      - run:
+          name: Install TLA+ CLI
+          command: |
+            source "$BASH_ENV"
+            uv init --bare
+            uv add --dev tlaplus-cli
+            uv run tla --version
+            uv run tla tools install
+            uv run tla check-java
+      - run:
+          name: Run TLA+ TLC model checks
+          command: |
+            source "$BASH_ENV"
+            for cfg_file in SPEC/tla/*.cfg; do
+              module="${cfg_file%.cfg}"
+              echo "Checking TLC model: $module"
+              uv run tla tlc "$module"
+            done
+      - run:
+          name: Install app dependencies
+          command: |
+            cd app
+            if [ -f package-lock.json ]; then
+              npm ci
+            else
+              npm install
+            fi
+      - run:
+          name: Run app tests
+          command: |
+            cd app
+            npm test
+            npm run test:vitest
+      - run:
+          name: Build app
+          command: |
+            cd app
+            npm run build
+
+workflows:
+  validation-workflow:
+    jobs:
+      - validate
+
