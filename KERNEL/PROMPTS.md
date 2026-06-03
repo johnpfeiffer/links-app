@@ -4,4 +4,5 @@ ok, now analyze and describe the most critical deviations from the SPEC that exi
 Then from your list above add the tests (thus beginning a TDD cycle - but no application implementation yet, just red tests)
 Ok, now fix the minimal code needed to make the tests pass (if in doubt check AGENTS.md and KERNEL)
 I have reviewed your code and see your confusion about the ApplicationName - now it is clarified in KERNEL/INVARIANTS.md - redo the spec and tests
+now use TDD to match the /SPEC/ - remember minimal code changes
 

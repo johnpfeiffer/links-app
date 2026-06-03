@@ -21,35 +21,62 @@ describe("isTagEnabled", () => {
 });
 
 describe("buildTagsPath", () => {
-  it("builds a path with app and tags", () => {
-    const tags = [Tag.fromLabel("ai"), Tag.fromLabel("podcast")];
-    assert.equal(buildTagsPath("myapp", tags), "/myapp/ai/podcast");
-  });
-
-  it("replaces whitespace with dashes", () => {
+  it("builds canonical /tags paths for an empty application name", () => {
+    assert.equal(buildTagsPath("", [Tag.fromLabel("ai")]), "/tags/ai");
     assert.equal(
-      buildTagsPath("myapp", [Tag.fromLabel("Business History"), Tag.fromLabel("AI")]),
-      "/myapp/business-history/ai"
+      buildTagsPath("", [Tag.fromLabel("ai"), Tag.fromLabel("podcast")]),
+      "/tags/ai/podcast"
     );
   });
 
-  it("builds a path without an app", () => {
-    assert.equal(buildTagsPath("", [Tag.fromLabel("ai")]), "/ai");
+  it("preserves the application name before the /tags namespace", () => {
+    assert.equal(buildTagsPath("links", [Tag.fromLabel("ai")]), "/links/tags/ai");
+    assert.equal(
+      buildTagsPath("links", [Tag.fromLabel("ai"), Tag.fromLabel("podcast")]),
+      "/links/tags/ai/podcast"
+    );
+  });
+
+  it("replaces whitespace with dashes in canonical /tags paths", () => {
+    assert.equal(
+      buildTagsPath("links", [Tag.fromLabel("Business History"), Tag.fromLabel("AI")]),
+      "/links/tags/business-history/ai"
+    );
+  });
+
+  it("builds the links namespace route when no tags are selected", () => {
+    assert.equal(buildTagsPath("", []), "/tags");
+    assert.equal(buildTagsPath("links", []), "/links/tags");
   });
 });
 
 describe("buildTagTogglePath", () => {
-  it("adds a tag to the end when disabled", () => {
+  it("adds a disabled tag to the canonical /tags path", () => {
     const enabled = [Tag.fromLabel("tag1")];
-    const next = buildTagTogglePath("myapp", enabled, Tag.fromLabel("tag2"));
+    const next = buildTagTogglePath("", enabled, Tag.fromLabel("tag2"));
 
-    assert.equal(next, "/myapp/tag1/tag2");
+    assert.equal(next, "/tags/tag1/tag2");
   });
 
-  it("removes a tag when enabled", () => {
-    const enabled = [Tag.fromLabel("tag1"), Tag.fromLabel("tag2")];
-    const next = buildTagTogglePath("myapp", enabled, Tag.fromLabel("tag1"));
+  it("preserves the application name when adding a disabled tag", () => {
+    const enabled = [Tag.fromLabel("tag1")];
+    const next = buildTagTogglePath("links", enabled, Tag.fromLabel("tag2"));
 
-    assert.equal(next, "/myapp/tag2");
+    assert.equal(next, "/links/tags/tag1/tag2");
+  });
+
+  it("removes an enabled tag from the canonical /tags path", () => {
+    const enabled = [Tag.fromLabel("tag1"), Tag.fromLabel("tag2")];
+    const next = buildTagTogglePath("", enabled, Tag.fromLabel("tag1"));
+
+    assert.equal(next, "/tags/tag2");
+  });
+
+  it("returns the links namespace route after removing the final enabled tag", () => {
+    const rootNext = buildTagTogglePath("", [Tag.fromLabel("ai")], Tag.fromLabel("ai"));
+    const appNext = buildTagTogglePath("links", [Tag.fromLabel("ai")], Tag.fromLabel("ai"));
+
+    assert.equal(rootNext, "/tags");
+    assert.equal(appNext, "/links/tags");
   });
 });

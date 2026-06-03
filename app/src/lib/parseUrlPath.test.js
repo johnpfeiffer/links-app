@@ -4,36 +4,69 @@ import { parseUrlPath } from "./parseUrlPath.js";
 import { Tag } from "../models/tag.js";
 
 describe("parseUrlPath", () => {
-  it("extracts app and tags from a full path", () => {
-    assert.deepEqual(parseUrlPath("/myrouter/engineering/architecture"), {
-      app: "myrouter",
-      tags: [Tag.fromSlug("engineering"), Tag.fromSlug("architecture")],
+  it("parses the default route as Links View with no selected tags", () => {
+    assert.deepEqual(parseUrlPath("/"), {
+      app: "",
+      routeNamespace: "default",
+      view: "links",
+      tags: [],
     });
-  });
-
-  it("handles duplicates", () => {
-    assert.deepEqual(parseUrlPath("/myrouter/engineering/architecture/engineering"), {
-      app: "myrouter",
-      tags: [Tag.fromSlug("engineering"), Tag.fromSlug("architecture")],
-    });
-  });
-
-  it("converts dashed tags into spaced tags", () => {
-    assert.deepEqual(parseUrlPath("/myrouter/Business-History"), {
-      app: "myrouter",
-      tags: [Tag.fromSlug("Business-History")],
-    });
-  });
-
-  it("handles an app-only path", () => {
-    assert.deepEqual(parseUrlPath("/myrouter/"), {
-      app: "myrouter",
+    assert.deepEqual(parseUrlPath(""), {
+      app: "",
+      routeNamespace: "default",
+      view: "links",
       tags: [],
     });
   });
 
-  it("handles empty or root paths", () => {
-    assert.deepEqual(parseUrlPath("/"), { app: "", tags: [] });
-    assert.deepEqual(parseUrlPath(""), { app: "", tags: [] });
+  it("parses an application base route as Links View with no selected tags", () => {
+    assert.deepEqual(parseUrlPath("/links/"), {
+      app: "links",
+      routeNamespace: "default",
+      view: "links",
+      tags: [],
+    });
+  });
+
+  it("parses /tags route segments as selected tag slugs when app name is empty", () => {
+    assert.deepEqual(parseUrlPath("/tags/engineering/architecture"), {
+      app: "",
+      routeNamespace: "tags",
+      view: "links",
+      tags: [Tag.fromSlug("engineering"), Tag.fromSlug("architecture")],
+    });
+  });
+
+  it("parses /sources route segments as selected tag slugs when app name is empty", () => {
+    assert.deepEqual(parseUrlPath("/sources/ai/podcast"), {
+      app: "",
+      routeNamespace: "sources",
+      view: "sources",
+      tags: [Tag.fromSlug("ai"), Tag.fromSlug("podcast")],
+    });
+  });
+
+  it("parses route namespaces after the application name", () => {
+    assert.deepEqual(parseUrlPath("/links/tags/engineering/architecture"), {
+      app: "links",
+      routeNamespace: "tags",
+      view: "links",
+      tags: [Tag.fromSlug("engineering"), Tag.fromSlug("architecture")],
+    });
+    assert.deepEqual(parseUrlPath("/links/sources/ai/podcast"), {
+      app: "links",
+      routeNamespace: "sources",
+      view: "sources",
+      tags: [Tag.fromSlug("ai"), Tag.fromSlug("podcast")],
+    });
+  });
+
+  it("canonicalizes duplicate selected slugs after the route namespace", () => {
+    assert.deepEqual(parseUrlPath("/links/tags/engineering/architecture/engineering"), {
+      app: "links",
+      routeNamespace: "tags",
+      view: "links",
+      tags: [Tag.fromSlug("engineering"), Tag.fromSlug("architecture")],
+    });
   });
 });

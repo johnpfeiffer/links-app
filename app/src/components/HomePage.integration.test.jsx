@@ -81,7 +81,19 @@ async function renderAtPath(initialPath) {
       element: <Outlet />,
       children: [
         {
-          path: ":app/*",
+          index: true,
+          element: <TestHomePage />,
+        },
+        {
+          path: "tags/*",
+          element: <TestHomePage />,
+        },
+        {
+          path: ":app",
+          element: <TestHomePage />,
+        },
+        {
+          path: ":app/tags/*",
           element: <TestHomePage />,
         },
       ],
@@ -112,7 +124,7 @@ async function renderAtPath(initialPath) {
 
 describe("HomePage integration", () => {
   it("shows all links when no tags are in the URL path", async () => {
-    const { container, cleanup } = await renderAtPath("/myapp");
+    const { container, cleanup } = await renderAtPath("/links/tags");
 
     const anchors = Array.from(container.querySelectorAll('a[href]'));
     const hrefs = anchors.map((a) => a.getAttribute("href"));
@@ -120,12 +132,13 @@ describe("HomePage integration", () => {
     expect(hrefs).toContain("https://a.example.com");
     expect(hrefs).toContain("https://b.example.com");
     expect(hrefs).toContain("https://c.example.com");
+    expect(container.textContent).toContain("Showing 3 links");
 
     await cleanup();
   });
 
   it("filters to only matching links when tags are in the URL path", async () => {
-    const { container, cleanup } = await renderAtPath("/myapp/ai");
+    const { container, cleanup } = await renderAtPath("/links/tags/ai");
 
     const anchors = Array.from(container.querySelectorAll('a[href]'));
     const hrefs = anchors.map((a) => a.getAttribute("href"));
@@ -133,12 +146,15 @@ describe("HomePage integration", () => {
     expect(hrefs).toContain("https://a.example.com");
     expect(hrefs).toContain("https://b.example.com");
     expect(hrefs).not.toContain("https://c.example.com");
+    expect(hrefs).toContain("/links/tags");
+    expect(hrefs).toContain("/links/tags/ai/podcast");
+    expect(container.textContent).toContain("Showing 2 links");
 
     await cleanup();
   });
 
   it("filters with multiple tags (AND logic)", async () => {
-    const { container, cleanup } = await renderAtPath("/myapp/ai/podcast");
+    const { container, cleanup } = await renderAtPath("/links/tags/ai/podcast");
 
     const anchors = Array.from(container.querySelectorAll('a[href]'));
     const hrefs = anchors.map((a) => a.getAttribute("href"));
@@ -146,14 +162,16 @@ describe("HomePage integration", () => {
     expect(hrefs).toContain("https://a.example.com");
     expect(hrefs).not.toContain("https://b.example.com");
     expect(hrefs).not.toContain("https://c.example.com");
+    expect(container.textContent).toContain("Showing 1 links");
 
     await cleanup();
   });
 
   it("shows 'No links found' when no links match", async () => {
-    const { container, cleanup } = await renderAtPath("/myapp/nonexistent");
+    const { container, cleanup } = await renderAtPath("/links/tags/nonexistent");
 
     expect(container.textContent).toContain("No links found");
+    expect(container.textContent).toContain("Showing 0 links");
 
     await cleanup();
   });

@@ -60,9 +60,9 @@ describe("AllTagsSection integration", () => {
       const tags = [Tag.fromLabel("Example Tag")];
       const routes = [
         {
-          path: "/:app/*",
+          path: "*",
           loader: () => ({
-            app: "myapp",
+            app: "links",
             tags,
             enabledTags: [],
           }),
@@ -70,7 +70,7 @@ describe("AllTagsSection integration", () => {
         },
       ];
       const router = createMemoryRouter(routes, {
-        initialEntries: ["/myapp"],
+        initialEntries: ["/links/tags"],
         future: {
           v7_startTransition: true,
           v7_relativeSplatPath: true,
@@ -117,7 +117,7 @@ describe("AllTagsSection integration", () => {
       });
 
       const locationDisplay = container.querySelector('[data-testid="location"]');
-      expect(locationDisplay?.textContent).toBe("/myapp/example-tag");
+      expect(locationDisplay?.textContent).toBe("/links/tags/example-tag");
 
       await act(async () => {
         root.unmount();

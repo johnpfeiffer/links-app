@@ -30,12 +30,12 @@ async function renderFavoriteTags(props) {
   const router = createMemoryRouter(
     [
       {
-        path: "/myapp/*",
+        path: "*",
         element: <FavoriteTagsSection {...props} />,
       },
     ],
     {
-      initialEntries: ["/myapp"],
+      initialEntries: ["/"],
       future: futureConfig,
     }
   );
@@ -60,7 +60,7 @@ async function renderFavoriteTags(props) {
 describe("FavoriteTagsSection", () => {
   it("renders favorite tags in order with links", async () => {
     const { container, cleanup } = await renderFavoriteTags({
-      app: "myapp",
+      app: "links",
       enabledTags: [],
     });
     const links = Array.from(container.querySelectorAll("a"));
@@ -69,13 +69,13 @@ describe("FavoriteTagsSection", () => {
 
     expect(labels).toEqual(["AI", "Business", "Engineering", "History", "People", "Podcast", "Book"]);
     expect(hrefs).toEqual([
-      "/myapp/ai",
-      "/myapp/business",
-      "/myapp/engineering",
-      "/myapp/history",
-      "/myapp/people",
-      "/myapp/podcast",
-      "/myapp/book",
+      "/links/tags/ai",
+      "/links/tags/business",
+      "/links/tags/engineering",
+      "/links/tags/history",
+      "/links/tags/people",
+      "/links/tags/podcast",
+      "/links/tags/book",
     ]);
 
     await cleanup();
@@ -83,14 +83,28 @@ describe("FavoriteTagsSection", () => {
 
   it("removes enabled tags in toggle links", async () => {
     const { container, cleanup } = await renderFavoriteTags({
-      app: "myapp",
+      app: "links",
       enabledTags: [Tag.fromLabel("AI")],
     });
     const aiLink = Array.from(container.querySelectorAll("a")).find(
       (anchor) => anchor.textContent?.trim() === "AI"
     );
 
-    expect(aiLink?.getAttribute("href")).toBe("/myapp");
+    expect(aiLink?.getAttribute("href")).toBe("/links/tags");
+
+    await cleanup();
+  });
+
+  it("builds root /tags links when the application name is empty", async () => {
+    const { container, cleanup } = await renderFavoriteTags({
+      app: "",
+      enabledTags: [],
+    });
+    const aiLink = Array.from(container.querySelectorAll("a")).find(
+      (anchor) => anchor.textContent?.trim() === "AI"
+    );
+
+    expect(aiLink?.getAttribute("href")).toBe("/tags/ai");
 
     await cleanup();
   });

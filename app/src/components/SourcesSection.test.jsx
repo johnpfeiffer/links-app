@@ -3,6 +3,7 @@ import React, { act } from "react";
 import { describe, expect, it } from "vitest";
 import { createRoot } from "react-dom/client";
 import SourcesSection, { buildDomainStats } from "./SourcesSection.jsx";
+import { Tag } from "../models/tag.js";
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -65,6 +66,41 @@ describe("buildDomainStats", () => {
 
     expect(exampleStat).toBeTruthy();
     expect(exampleStat?.links.map((link) => link.id)).toEqual(["2", "1", "3"]);
+  });
+
+  it("builds source counts from only currently included links", () => {
+    const links = [
+      {
+        id: "1",
+        title: "Both",
+        url: "https://example.com/both",
+        published: "2022-06-01",
+        tags: [Tag.fromLabel("AI"), Tag.fromLabel("Podcast")],
+      },
+      {
+        id: "2",
+        title: "AI only",
+        url: "https://ai.example.com/one",
+        published: "2021-01-15",
+        tags: [Tag.fromLabel("AI")],
+      },
+      {
+        id: "3",
+        title: "Podcast only",
+        url: "https://podcast.example.com/one",
+        published: null,
+        tags: [Tag.fromLabel("Podcast")],
+      },
+    ];
+
+    const stats = buildDomainStats(links, [
+      Tag.fromLabel("AI"),
+      Tag.fromLabel("Podcast"),
+    ]);
+
+    expect(stats.map((stat) => [stat.domain, stat.count])).toEqual([
+      ["example.com", 1],
+    ]);
   });
 });
 

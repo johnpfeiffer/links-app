@@ -30,12 +30,12 @@ async function renderLinksList(props) {
   const router = createMemoryRouter(
     [
       {
-        path: "/myapp/*",
+        path: "*",
         element: <LinksList {...props} />,
       },
     ],
     {
-      initialEntries: ["/myapp"],
+      initialEntries: ["/"],
       future: futureConfig,
     }
   );
@@ -60,7 +60,6 @@ describe("LinksList", () => {
     const { container, cleanup } = await renderLinksList({
       links: [],
       enabledTags: [],
-      app: "myapp",
     });
 
     expect(container.textContent).toContain("No links found");
@@ -89,7 +88,6 @@ describe("LinksList", () => {
     const { container, cleanup } = await renderLinksList({
       links,
       enabledTags: [],
-      app: "myapp",
     });
 
     const anchors = Array.from(
@@ -121,7 +119,6 @@ describe("LinksList", () => {
     const { container, cleanup } = await renderLinksList({
       links,
       enabledTags: [Tag.fromLabel("AI")],
-      app: "myapp",
     });
 
     const chips = Array.from(container.querySelectorAll(".MuiChip-root"));
@@ -130,6 +127,32 @@ describe("LinksList", () => {
 
     expect(aiChip?.classList.contains("MuiChip-colorPrimary")).toBe(true);
     expect(historyChip?.classList.contains("MuiChip-colorPrimary")).toBe(false);
+
+    await cleanup();
+  });
+
+  it("preserves the application name in rendered tag links", async () => {
+    const links = [
+      {
+        id: "1",
+        url: "https://example.com/one",
+        title: "Title One",
+        description: "Description One",
+        tags: [Tag.fromLabel("AI"), Tag.fromLabel("History")],
+      },
+    ];
+
+    const { container, cleanup } = await renderLinksList({
+      app: "links",
+      links,
+      enabledTags: [Tag.fromLabel("AI")],
+    });
+
+    const historyChipLink = Array.from(container.querySelectorAll("a")).find(
+      (anchor) => anchor.textContent === "History"
+    );
+
+    expect(historyChipLink?.getAttribute("href")).toBe("/links/tags/ai/history");
 
     await cleanup();
   });
