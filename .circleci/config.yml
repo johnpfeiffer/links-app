@@ -28,15 +28,14 @@ jobs:
             uv run tla tools install
             uv run tla check-java
       - run:
-            name: Run TLA+ TLC checks for all SPEC/tla/*.tla files
-            command: |
-              source "$BASH_ENV"
-              for tla_file in SPEC/tla/*.tla; do
-                module="${tla_file%.tla}"
-                echo "Checking $module"
-                uv run tla tlc "$module"
-              done
-
+          name: Run TLA+ TLC model checks
+          command: |
+            source "$BASH_ENV"
+            for cfg_file in SPEC/tla/*.cfg; do
+              module="${cfg_file%.cfg}"
+              echo "Checking TLC model: $module"
+              uv run tla tlc "$module"
+            done
       - run:
           name: Install app dependencies
           command: |
@@ -46,15 +45,12 @@ jobs:
             else
               npm install
             fi
-
       - run:
-
           name: Run app tests
           command: |
             cd app
             npm test
             npm run test:vitest
-
       - run:
           name: Build app
           command: |
@@ -65,3 +61,4 @@ workflows:
   validation-workflow:
     jobs:
       - validate
+
