@@ -3,7 +3,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { buildTagTogglePath } from "../models/tags";
 import LinksList from "./LinksList";
 
-export default function LinksSection({ links, enabledTags }) {
+export default function LinksSection({ app, links, enabledTags }) {
   return (
     <Box>
       {enabledTags.length > 0 ? (
@@ -17,7 +17,7 @@ export default function LinksSection({ links, enabledTags }) {
             sx={{ flexWrap: "wrap", alignItems: "center" }}
           >
             {enabledTags.map((tag) => {
-              const to = buildTagTogglePath(enabledTags, tag);
+              const to = buildTagTogglePath(app, enabledTags, tag);
 
               return (
                 <Chip
@@ -40,7 +40,7 @@ export default function LinksSection({ links, enabledTags }) {
         Showing <b>{links.length}</b> links
       </Typography>
       <Divider sx={{ my: 2 }} />
-      <LinksList enabledTags={enabledTags} links={links} />
+      <LinksList app={app} enabledTags={enabledTags} links={links} />
     </Box>
   );
 }

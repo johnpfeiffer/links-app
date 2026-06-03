@@ -5,11 +5,13 @@ export function isTagEnabled(enabledTags, tag) {
 
 export function buildTagsPath(app, tags) {
   const segments = [];
-  const trimmedApp = String(app ?? "").trim().toLowerCase();
+  const trimmedApp = String(app ?? "").trim();
 
   if (trimmedApp) {
-    segments.push(trimmedApp);
+    segments.push(encodeURIComponent(trimmedApp));
   }
+
+  segments.push("tags");
 
   tags.forEach((tag) => {
     if (!tag || !tag.key) return;

@@ -10,6 +10,7 @@ import {
   ListItem,
   Typography,
 } from "@mui/material";
+import { filterLinksByTags } from "../models/links";
 
 function compareLinksByPublished(left, right) {
   const leftPublished = left?.published ?? null;
@@ -31,14 +32,15 @@ function compareLinksByPublished(left, right) {
   return leftPublished.localeCompare(rightPublished);
 }
 
-export function buildDomainStats(links) {
+export function buildDomainStats(links, selectedTags = []) {
   if (!Array.isArray(links)) {
     return [];
   }
 
+  const includedLinks = filterLinksByTags(links, selectedTags);
   const domainGroups = new Map();
 
-  links.forEach((link) => {
+  includedLinks.forEach((link) => {
     const rawUrl = typeof link?.url === "string" ? link.url.trim() : "";
     if (!rawUrl) {
       console.warn("Skipping link without a URL for sources.", link);
@@ -75,9 +77,12 @@ export function buildDomainStats(links) {
     });
 }
 
-export default function SourcesSection({ links }) {
+export default function SourcesSection({ links, selectedTags = [] }) {
   const [expandedDomains, setExpandedDomains] = useState(() => new Set());
-  const domainStats = useMemo(() => buildDomainStats(links), [links]);
+  const domainStats = useMemo(
+    () => buildDomainStats(links, selectedTags),
+    [links, selectedTags]
+  );
 
   const toggleDomain = (domain) => {
     setExpandedDomains((prev) => {

@@ -12,6 +12,7 @@ import {
 import { parseUrlPath } from "../lib/parseUrlPath";
 import { collectTags, filterLinksByTags } from "../models/links";
 import { Link } from "../models/link";
+import HomePage from "./HomePage";
 import LinksSection from "./LinksSection";
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
@@ -172,6 +173,91 @@ describe("HomePage integration", () => {
 
     expect(container.textContent).toContain("No links found");
     expect(container.textContent).toContain("Showing 0 links");
+
+    await cleanup();
+  });
+});
+
+async function renderActualHomePageAtPath(initialPath) {
+  const container = document.createElement("div");
+  document.body.appendChild(container);
+  const root = createRoot(container);
+  const OriginalRequest = globalThis.Request;
+  globalThis.Request = class TestRequest {
+    constructor(input, init = {}) {
+      this.url = typeof input === "string" ? input : input?.url ?? String(input);
+      this.signal = init.signal;
+      this.method = init.method ?? "GET";
+      this.headers = init.headers ?? new Headers();
+      this.body = init.body ?? null;
+    }
+  };
+
+  const routes = [
+    {
+      id: "root",
+      loader: () => ({ links: testLinks }),
+      element: <Outlet />,
+      children: [
+        {
+          index: true,
+          element: <HomePage />,
+        },
+        {
+          path: "tags/*",
+          element: <HomePage />,
+        },
+        {
+          path: ":app",
+          element: <HomePage />,
+        },
+        {
+          path: ":app/tags/*",
+          element: <HomePage />,
+        },
+      ],
+    },
+  ];
+
+  const router = createMemoryRouter(routes, {
+    initialEntries: [initialPath],
+    future: futureConfig,
+  });
+
+  await act(async () => {
+    root.render(<RouterProvider router={router} future={futureConfig} />);
+  });
+
+  const cleanup = async () => {
+    await act(async () => {
+      root.unmount();
+    });
+    container.remove();
+    globalThis.Request = OriginalRequest;
+  };
+
+  return { container, cleanup };
+}
+
+describe("HomePage Sources navigation", () => {
+  it("shows Sources navigation when the application name is empty", async () => {
+    const { container, cleanup } = await renderActualHomePageAtPath("/tags");
+    const sourcesLink = Array.from(container.querySelectorAll("a")).find(
+      (anchor) => anchor.textContent?.trim() === "Sources"
+    );
+
+    expect(sourcesLink?.getAttribute("href")).toBe("/sources");
+
+    await cleanup();
+  });
+
+  it("preserves app name and selected tags in Sources navigation", async () => {
+    const { container, cleanup } = await renderActualHomePageAtPath("/links/tags/ai");
+    const sourcesLink = Array.from(container.querySelectorAll("a")).find(
+      (anchor) => anchor.textContent?.trim() === "Sources"
+    );
+
+    expect(sourcesLink?.getAttribute("href")).toBe("/links/sources/ai");
 
     await cleanup();
   });

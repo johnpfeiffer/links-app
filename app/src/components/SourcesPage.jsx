@@ -2,28 +2,20 @@ import { Suspense } from "react";
 import {
   Await,
   Link as RouterLink,
-  useParams,
+  useLocation,
   useRouteLoaderData,
 } from "react-router-dom";
 import { Box, Button, Container, Paper } from "@mui/material";
+import { parseUrlPath } from "../lib/parseUrlPath";
 import { buildTagsPath } from "../models/tags";
 import Loading from "./Loading";
 import SourcesSection from "./SourcesSection";
 
-function normalizeAppParam(value) {
-  if (typeof value !== "string") return "";
-  try {
-    return decodeURIComponent(value);
-  } catch (error) {
-    return value;
-  }
-}
-
 export default function SourcesPage() {
+  const location = useLocation();
   const loaderData = useRouteLoaderData("root");
   const links = loaderData?.links ?? [];
-  const params = useParams();
-  const app = normalizeAppParam(params.app);
+  const { app, tags } = parseUrlPath(location.pathname);
   const homePath = buildTagsPath(app, []);
 
   return (
@@ -41,7 +33,9 @@ export default function SourcesPage() {
         </Box>
         <Suspense fallback={<Loading message="Loading sources..." />}>
           <Await resolve={links}>
-            {(loadedLinks) => <SourcesSection links={loadedLinks} />}
+            {(loadedLinks) => (
+              <SourcesSection links={loadedLinks} selectedTags={tags} />
+            )}
           </Await>
         </Suspense>
       </Paper>

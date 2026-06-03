@@ -15,12 +15,18 @@ import AllTagsSection from "./AllTagsSection";
 import LinksSection from "./LinksSection";
 import Loading from "./Loading";
 
-function buildSourcesPath(app) {
-  const basePath = buildTagsPath(app, []);
-  if (basePath === "/") {
-    return "/sources";
+function buildSourcesPath(app, tags = []) {
+  const segments = [];
+  const trimmedApp = String(app ?? "").trim();
+  if (trimmedApp) {
+    segments.push(encodeURIComponent(trimmedApp));
   }
-  return `${basePath}/sources`;
+  segments.push("sources");
+  tags.forEach((tag) => {
+    if (!tag?.key) return;
+    segments.push(encodeURIComponent(tag.key));
+  });
+  return `/${segments.join("/")}`;
 }
 
 export default function HomePage() {
@@ -54,16 +60,14 @@ export default function HomePage() {
             <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 600 }}>
               John's favorite links
             </Typography>
-            {app ? (
-              <Button
-                component={RouterLink}
-                to={buildSourcesPath(app)}
-                variant="outlined"
-                size="small"
-              >
-                Sources
-              </Button>
-            ) : null}
+            <Button
+              component={RouterLink}
+              to={buildSourcesPath(app, tags)}
+              variant="outlined"
+              size="small"
+            >
+              Sources
+            </Button>
           </Box>
           <Typography variant="body2" color="text.secondary" gutterBottom>
             A hand picked list of links for podcasts, blogs, and resources for Software Engineers, People Managers, and people who love to learn =)

@@ -27,11 +27,23 @@ const router = createBrowserRouter([
     element: <Outlet />,
     children: [
       {
-        path: ":app/sources",
+        path: "sources/*",
         element: <SourcesPage />,
       },
       {
-        path: ":app/*",
+        path: ":app/sources/*",
+        element: <SourcesPage />,
+      },
+      {
+        path: "tags/*",
+        element: <HomePage />,
+      },
+      {
+        path: ":app/tags/*",
+        element: <HomePage />,
+      },
+      {
+        path: ":app",
         element: <HomePage />,
       },
       {
