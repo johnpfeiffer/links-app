@@ -2,19 +2,23 @@
 EXTENDS Naturals, FiniteSets, TLC
 
 \* Derived from /KERNEL/INVARIANTS.md.
-\* Business predicates are named INV001 through INV016 and trace directly to
+\* Business predicates are named INV001 through INV018 and trace directly to
 \* the corresponding kernel invariant. Init, Next, and Spec are TLC harness
 \* operators only.
 
 CONSTANTS InitialLinks, InitialSelectedSlugs, InitialAppName,
           InitialRouteNamespace, InitialDisplayedLinkCount,
-          InitialIsAppBaseRoute, InitialCanonicalPath
+          InitialIsAppBaseRoute, InitialCanonicalPath,
+          InitialChatRecommendations, InitialVisibleChatRecommendationCount,
+          InitialChatSubmitEnabled, InitialChatEnabled
 
 VARIABLES links, selectedSlugs, appName, routeNamespace, displayedLinkCount,
-          isAppBaseRoute, canonicalPath
+          isAppBaseRoute, canonicalPath, chatRecommendations,
+          visibleChatRecommendationCount, chatSubmitEnabled, chatEnabled
 
 vars == <<links, selectedSlugs, appName, routeNamespace, displayedLinkCount,
-          isAppBaseRoute, canonicalPath>>
+          isAppBaseRoute, canonicalPath, chatRecommendations,
+          visibleChatRecommendationCount, chatSubmitEnabled, chatEnabled>>
 
 \* TLC model sentinel for kernel null.
 NullValue == "__NULL__"
@@ -94,6 +98,17 @@ AlternateUrlValues ==
     "https://alt.example.com/architecture"
   }
 
+LinkRecordType ==
+  [
+    id: STRING,
+    url: STRING,
+    title: STRING,
+    tags: SUBSET STRING,
+    published: PublishedValues,
+    description: STRING,
+    alternateUrl: AlternateUrlValues
+  ]
+
 DescriptionHasPublishedYearSuffix(description, published) ==
   CASE PublishedYear(published) = "2022" -> description = "Architecture Notes (2022)"
     [] PublishedYear(published) = "2024" -> description = "AI Podcast (2024)"
@@ -130,6 +145,11 @@ SourceMembers(source) ==
 
 SourceCount(source) == Cardinality(SourceMembers(source))
 
+ChatRecommendationAnswerMax == 2
+
+RecommendedLinksForIds(linkIds) ==
+  { link \in links : link.id \in linkIds }
+
 ExpectedNamespacePath ==
   CASE appName = "" /\ routeNamespace = "tags" /\ selectedSlugs = {} -> "/tags"
     [] appName = "" /\ routeNamespace = "tags" /\ selectedSlugs # {} -> "/tags/selected"
@@ -150,6 +170,10 @@ Init ==
   /\ displayedLinkCount = InitialDisplayedLinkCount
   /\ isAppBaseRoute = InitialIsAppBaseRoute
   /\ canonicalPath = InitialCanonicalPath
+  /\ chatRecommendations = InitialChatRecommendations
+  /\ visibleChatRecommendationCount = InitialVisibleChatRecommendationCount
+  /\ chatSubmitEnabled = InitialChatSubmitEnabled
+  /\ chatEnabled = InitialChatEnabled
 
 Next == UNCHANGED vars
 
@@ -159,15 +183,7 @@ Spec == Init /\ [][Next]_vars
 \* tags, published, description, and alternate-url. TLA+ field names cannot
 \* contain "-", so alternateUrl is the TLA-safe spelling of alternate-url.
 INV001 ==
-  links \in SUBSET [
-    id: STRING,
-    url: STRING,
-    title: STRING,
-    tags: SUBSET STRING,
-    published: PublishedValues,
-    description: STRING,
-    alternateUrl: AlternateUrlValues
-  ]
+  links \in SUBSET (LinkRecordType)
 
 \* INV-002: no two distinct links share an id.
 INV002 ==
@@ -277,5 +293,26 @@ INV015 ==
 \* INV-016: every link has alternate-url as a URL or empty string.
 INV016 ==
   \A link \in links : link.alternateUrl \in AlternateUrlValues
+
+\* INV-017: chat recommendations are drawn only from existing links. Link ids
+\* resolve to exactly one existing link, modeled link id sets cannot duplicate
+\* a link, and recommended link records are provided exactly as they exist.
+INV017 ==
+  \A recommendation \in chatRecommendations :
+    /\ recommendation.id # ""
+    /\ recommendation.linkIds # {}
+    /\ \A linkId \in recommendation.linkIds :
+      Cardinality({ link \in links : link.id = linkId }) = 1
+    /\ recommendation.recommendedLinks =
+      RecommendedLinksForIds(recommendation.linkIds)
+
+\* INV-018: chat sessions visibly count recommendation answers and disable new
+\* chat submissions at the maximum of two recommendation answers.
+INV018 ==
+  /\ visibleChatRecommendationCount = Cardinality(chatRecommendations)
+  /\ visibleChatRecommendationCount <= ChatRecommendationAnswerMax
+  /\ (visibleChatRecommendationCount = ChatRecommendationAnswerMax =>
+    /\ chatSubmitEnabled = FALSE
+    /\ chatEnabled = FALSE)
 
 =============================================================================

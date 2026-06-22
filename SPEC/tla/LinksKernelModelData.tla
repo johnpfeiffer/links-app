@@ -66,4 +66,51 @@ CanonicalPathFiltered == "/links/tags/selected"
 
 CanonicalPathSources == "/links/sources/selected"
 
+ChatRecommendationsNone == {}
+
+ChatRecommendationsMax == {
+  [
+    id |-> "recommendation-1",
+    linkIds |-> {"link-1"},
+    recommendedLinks |-> {
+      [
+        id |-> "link-1",
+        url |-> "https://www.example.com/architecture",
+        title |-> "Architecture Notes",
+        tags |-> {"Engineering", "Architecture"},
+        published |-> "2022-06-01",
+        description |-> "Architecture Notes (2022)",
+        alternateUrl |-> "https://alt.example.com/architecture"
+      ]
+    }
+  ],
+  [
+    id |-> "recommendation-2",
+    linkIds |-> {"link-2"},
+    recommendedLinks |-> {
+      [
+        id |-> "link-2",
+        url |-> "https://example.com/ai",
+        title |-> "AI Podcast",
+        tags |-> {"AI", "Podcast"},
+        published |-> "2024-06-28T15:04:05Z",
+        description |-> "AI Podcast (2024)",
+        alternateUrl |-> ""
+      ]
+    }
+  ]
+}
+
+VisibleChatRecommendationCountNone == 0
+
+VisibleChatRecommendationCountMax == 2
+
+ChatSubmitEnabledTrue == TRUE
+
+ChatSubmitEnabledFalse == FALSE
+
+ChatEnabledTrue == TRUE
+
+ChatEnabledFalse == FALSE
+
 =============================================================================

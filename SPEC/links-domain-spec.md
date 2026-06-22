@@ -95,6 +95,29 @@ A link is a member of a Source if and only if:
 
 A Source count equals its member link count. Sources with count `0` are not included in the current view.
 
+## Chat Recommendations
+
+Trace: `INV-017`, `INV-018`
+
+Chat responses are recommendation responses over the existing loaded links collection.
+
+A chat recommendation must:
+
+- be connected to at least one existing link.
+- reference only link ids that resolve to exactly one loaded link.
+- not include the same link more than once in the same recommendation.
+- provide the recommended link attributes exactly as loaded; chat must not mutate link data, create links, rewrite titles, rewrite URLs, rewrite tags, rewrite `published`, rewrite `description`, or rewrite `alternate-url`.
+
+Chat session state must expose a visible recommendation count. A session allows at most `2` recommendation answers. When the visible recommendation count reaches `2`, new request submission is disabled and chat is disabled.
+
+The initial backend integration is a Worker endpoint at `/links/chat` for the deployed `links` app namespace. The MVP security boundary is:
+
+- React SPA calls the Worker endpoint.
+- Worker allows only exact-origin CORS requests for the hosting origin or explicitly configured allowed origins.
+- Turnstile, rate limiting, low token caps, model calls, and response shaping are future implementation gates.
+
+The intended model provider path is Google Gemini/Gemma through Gemini API. Google documents an OpenAI-compatible Gemini API path using `https://generativelanguage.googleapis.com/v1beta/` and `chat/completions`; Google also documents hosted Gemma models on Gemini API. The derived chat invariants still require final responses to be link-grounded regardless of provider.
+
 ## Views
 
 ### Links View

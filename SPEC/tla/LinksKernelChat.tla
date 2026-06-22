@@ -1,4 +1,4 @@
------------------------------ MODULE LinksKernelAll ---------------------------
+----------------------------- MODULE LinksKernelChat --------------------------
 EXTENDS LinksKernelModelData
 
 VARIABLES links, selectedSlugs, appName, routeNamespace, displayedLinkCount,
@@ -20,13 +20,13 @@ INSTANCE LinksKernel
        InitialLinks <- ModelLinks,
        InitialSelectedSlugs <- SelectedSlugsAll,
        InitialAppName <- AppNameLinks,
-       InitialRouteNamespace <- RouteDefault,
+       InitialRouteNamespace <- RouteTags,
        InitialDisplayedLinkCount <- DisplayedLinkCountAll,
-       InitialIsAppBaseRoute <- IsAppBaseRouteTrue,
+       InitialIsAppBaseRoute <- IsAppBaseRouteFalse,
        InitialCanonicalPath <- CanonicalPathAll,
-       InitialChatRecommendations <- ChatRecommendationsNone,
-       InitialVisibleChatRecommendationCount <- VisibleChatRecommendationCountNone,
-       InitialChatSubmitEnabled <- ChatSubmitEnabledTrue,
-       InitialChatEnabled <- ChatEnabledTrue
+       InitialChatRecommendations <- ChatRecommendationsMax,
+       InitialVisibleChatRecommendationCount <- VisibleChatRecommendationCountMax,
+       InitialChatSubmitEnabled <- ChatSubmitEnabledFalse,
+       InitialChatEnabled <- ChatEnabledFalse
 
 =============================================================================

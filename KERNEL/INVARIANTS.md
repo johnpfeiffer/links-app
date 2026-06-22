@@ -54,3 +54,13 @@ A Source count equals the count of member Links. Only Sources with count greater
 ## INV-016: Alternate-URL attribute
 - Every link has an Alternate-URL field that can be a url or an empty string
 
+## INV-017: Chat recommendations are drawn only from existing links.
+- A Chat response can only be a recommendation that is connected to at least 1 link.
+- Every recommended link id must correspond to exactly one existing link.
+- The same link cannot appear more than once in a recommendation.
+- Chat does not mutate link data; all attributes and fields are provided as is
+
+## INV-018: Chat sessions have a maximum number of recommendations
+- There is a Count of Recommendations visible
+- At the max of 2 recommendation answers during Chat, the ability to submit a new request is disabled, chatting is disabled
+

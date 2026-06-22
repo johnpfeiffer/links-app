@@ -20,11 +20,12 @@ This directory is AI-derived from `/KERNEL/` and is not authoritative. If any st
 
 - `links-domain-spec.md`: product/domain interpretation of the kernel.
 - `implementation-plan.md`: red/green implementation and documentation plan.
-- `tla/LinksKernel.tla`: TLA+ specification traced to `INV-001` through `INV-016`.
+- `tla/LinksKernel.tla`: TLA+ specification traced to `INV-001` through `INV-018`.
 - `tla/LinksKernelModelData.tla`: literal TLC test data.
 - `tla/LinksKernelAll.tla` and `tla/LinksKernelAll.cfg`: TLC model for the default no-filter links view.
 - `tla/LinksKernelFiltered.tla` and `tla/LinksKernelFiltered.cfg`: TLC model for a filtered links view.
 - `tla/LinksKernelSources.tla` and `tla/LinksKernelSources.cfg`: TLC model for a filtered sources view.
+- `tla/LinksKernelChat.tla` and `tla/LinksKernelChat.cfg`: TLC model for a maxed-out chat recommendation session.
 
 ## Authority And Traceability
 
@@ -46,6 +47,8 @@ The current kernel invariants define:
 - `INV-014`: Every link has `published`, either `null` or an ISO 8601 date string.
 - `INV-015`: Every link has a non-empty trimmed `description` with published year suffix behavior.
 - `INV-016`: Every link has `alternate-url`, either a URL or an empty string.
+- `INV-017`: Chat recommendations are grounded in existing links only, do not duplicate links within a recommendation, and do not mutate link data.
+- `INV-018`: Chat sessions expose recommendation count and disable new chat requests at `2` recommendation answers.
 
 ## Scope Note
 

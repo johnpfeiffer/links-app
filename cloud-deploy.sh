@@ -8,7 +8,15 @@ git log --oneline -5
 echo "============================="
 
 mkdir -p "$DEST"
-rsync -av --delete --exclude='node_modules' --exclude='dist' app/ "$DEST"
-rsync -av README.md "$DEST"
-rsync -av docs/ "$DEST/docs/"
-
+rsync -av --delete \
+  --exclude='node_modules/' \
+  --exclude='dist/' \
+  --exclude='.env' \
+  --exclude='.env.*' \
+  --exclude='*.test.*' \
+  --exclude='*.spec.*' \
+  --exclude='__tests__/' \
+  --exclude='*.log' \
+  --exclude='.DS_Store' \
+  --exclude='src/content/*.py' \
+  app/ "$DEST"
