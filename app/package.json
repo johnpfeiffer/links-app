@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "node --test",
-    "test:vitest": "vitest run src/models/link.vitest.test.jsx src/components/AllTagsSection.integration.test.jsx src/components/FavoriteTagsSection.test.jsx src/components/HomePage.integration.test.jsx src/components/SourcesSection.test.jsx src/components/SourcesPage.integration.test.jsx"
+    "test:vitest": "vitest run src/models/link.vitest.test.jsx src/components/AllTagsSection.integration.test.jsx src/components/FavoriteTagsSection.test.jsx src/components/HomePage.integration.test.jsx src/components/SourcesSection.test.jsx src/components/SourcesPage.integration.test.jsx src/components/ChatPage.integration.test.jsx"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",

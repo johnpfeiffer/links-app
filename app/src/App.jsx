@@ -1,5 +1,6 @@
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { RouterProvider, createBrowserRouter, defer, Outlet } from "react-router-dom";
+import ChatPage from "./components/ChatPage";
 import HomePage from "./components/HomePage";
 import SourcesPage from "./components/SourcesPage";
 import { Link } from "./models/link.js";
@@ -33,6 +34,14 @@ const router = createBrowserRouter([
       {
         path: ":app/sources/*",
         element: <SourcesPage />,
+      },
+      {
+        path: "_chat",
+        element: <ChatPage />,
+      },
+      {
+        path: ":app/_chat",
+        element: <ChatPage />,
       },
       {
         path: "tags/*",

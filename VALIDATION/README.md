@@ -18,6 +18,7 @@ cd KERNEL
 rtk uv run tla tlc ../SPEC/tla/LinksKernelAll
 rtk uv run tla tlc ../SPEC/tla/LinksKernelFiltered
 rtk uv run tla tlc ../SPEC/tla/LinksKernelSources
+rtk uv run tla tlc ../SPEC/tla/LinksKernelChat
 ```
 
 Expected result:
@@ -35,3 +36,18 @@ rtk npm run test:vitest
 ```
 
 Add or update tests in the smallest relevant layer before implementation changes.
+
+## Worker Checks
+
+Run from the repository root:
+
+```bash
+rtk node --test functions/chat/cors.test.mjs
+```
+
+Expected result:
+
+- `/links/chat` preflight allows only exact configured origins.
+- disallowed origins are rejected without wildcard CORS headers.
+- unexpected requested headers are rejected.
+- successful chat responses include only exact-origin CORS headers.
