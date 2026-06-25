@@ -1,9 +1,21 @@
 {
   "Engineering": [
     {
+      "title": "Leslie Lamport interviewed about his papers on distributed systems",
+      "url": "https://www.developing.dev/p/turing-award-winner-on-working-with",
+      "published": "2026-02-23",
+      "tags": [
+        "Engineering",
+        "Algorithms",
+        "Distributed Systems",
+        "History",
+        "Podcast"
+      ]
+    },
+    {
       "title": "Golang context.Context package",
       "url": "https://changelog.com/gotime/143",
-      "published": null,
+      "published": "2020-08-20",
       "tags": [
         "Engineering",
         "Golang",
@@ -15,7 +27,7 @@
     {
       "title": "Dave Cheney about the Golang Context package",
       "url": "https://dave.cheney.net/2017/08/20/context-isnt-for-cancellation",
-      "published": null,
+      "published": "2017-08-20",
       "tags": [
         "Engineering",
         "Golang",
@@ -119,7 +131,8 @@
     {
       "title": "Sandi Metz: Code Smells Presentation at Laracon 2016",
       "url": "https://www.youtube.com/watch?v=MksJTtt7jS4&t=93s",
-      "published": null,
+      "alternate-url": "https://speakerdeck.com/skmetz/get-a-whiff-of-this",
+      "published": "2016-07-28",
       "tags": [
         "Engineering",
         "Quality",
@@ -127,9 +140,22 @@
       ]
     },
     {
+      "title": "Sandi Metz: ",
+      "url": "https://sandimetz.com/blog/2017/6/1/why-we-argue-style",
+      "published": "2017-06-01",
+      "tags": [
+        "Engineering",
+        "Team",
+        "Culture",
+        "Code Review",
+        "Blog"
+      ]
+    },
+    {
       "title": "Why and How to Make Smaller Pull Requests",
       "url": "https://robertheaton.com/2015/10/26/why-and-how-to-make-smaller-pull-requests/",
-      "published": null,
+      "alternate-url": "https://web.archive.org/web/20170526110111/https://robertheaton.com/2015/10/26/why-and-how-to-make-smaller-pull-requests/",
+      "published": "2015-10-26",
       "tags": [
         "Engineering",
         "Code Review",
@@ -139,7 +165,8 @@
     {
       "title": "Code Review Without Your Eyes - Heuristics for Quickly Reviewing Code",
       "url": "https://robertheaton.com/2014/06/20/code-review-without-your-eyes/",
-      "published": null,
+      "alternate-url": "https://web.archive.org/web/20160125080003/https://robertheaton.com/2014/06/20/code-review-without-your-eyes/",
+      "published": "2014-06-20",
       "tags": [
         "Engineering",
         "Code Review",
@@ -149,19 +176,8 @@
     },
     {
       "title": "Code Reviews Do Find Bugs",
-      "url": "https://two-wrongs.com/code-reviews-do-find-bugs",
-      "published": null,
-      "tags": [
-        "Engineering",
-        "Code Review",
-        "Quality",
-        "Blog"
-      ]
-    },
-    {
-      "title": "Code Review in Remote Teams",
-      "url": "https://web.hypothes.is/blog/code-review-in-remote-teams/",
-      "published": null,
+      "url": "https://entropicthoughts.com/code-reviews-do-find-bugs",
+      "published": "2024-09-17",
       "tags": [
         "Engineering",
         "Code Review",
@@ -172,14 +188,27 @@
     {
       "title": "The Art of Giving and Receiving Code Reviews",
       "url": "https://web.archive.org/web/20200111065923/https://www.alexandra-hill.com/2018/06/25/the-art-of-giving-and-receiving-code-reviews/",
-      "published": null,
+      "published": "2018-06-25",
       "tags": [
         "Engineering",
+        "Team",
+        "Culture",
         "Code Review",
         "Communication",
         "Blog"
       ]
     },
+    {
+  "title": "Git Commands to run before Reading any Codebase",
+  "url": "https://piechowski.io/post/git-commands-before-reading-code/",
+  "published": "2026-04-08",
+  "tags": [
+    "Git",
+    "Code Review",
+    "Engineering",
+    "Article"
+  ]
+},
     {
       "title": "SE Radio: The CAP Theorem Then and Now",
       "url": "https://se-radio.net/2015/05/the-cap-theorem-then-and-now",
@@ -222,7 +251,7 @@
     {
       "title": "Why We Need Software Specifications",
       "url": "https://www.wired.com/2013/01/code-bugs-programming-why-we-need-specs/",
-      "published": null,
+      "published": "2013-01-01",
       "tags": [
         "Engineering",
         "Requirements",
@@ -546,12 +575,25 @@
     {
       "title": "Big Ball of Mud - Foundational Essay on Software Architecture",
       "url": "https://web.archive.org/web/20210414115314/http://www.laputan.org/mud/",
-      "published": null,
+      "published": "1999-06-26",
       "tags": [
         "Engineering",
         "Architecture",
         "Anti-patterns",
-        "Systems Design"
+        "Systems Design",
+        "Article"
+      ]
+    },
+    {
+      "title": "ELC Preventing Over-Engineering aka Aspirational Mismatches by Lisa Dusseault",
+      "url": "https://elc.community/public/podcasts/the-cost-of-aspirational-mismatches-and-how-to-avoid-them-lisa-dusseault-compaas",
+      "published": "2020-08-30",
+      "tags": [
+        "Engineering",
+        "Anti-Patterns",
+        "Systems Design",
+        "Architecture",
+        "Podcast"
       ]
     },
     {
@@ -903,7 +945,7 @@
     {
       "title": "Software Engineering Daily: Go Networking with Sneha Inguva",
       "url": "https://softwareengineeringdaily.com/2020/02/18/go-networking-with-sneha-inguva/",
-      "published": null,
+      "published": "2020-02-18",
       "tags": [
         "Engineering",
         "Golang",
@@ -926,10 +968,20 @@
     {
       "title": "Tony Hoare: Communicating Sequential Processes",
       "url": "https://www.cs.cmu.edu/~crary/819-f09/Hoare78.pdf",
-      "published": null,
+      "published": "1978-08-01",
       "tags": [
         "Engineering",
         "Concurrency",
+        "Tony Hoare"
+      ]
+    },
+    {
+      "title": "Tony Hoare: 1980 Turing Award Speech on learning from failure and simple reduces risk",
+      "url": "https://www.labouseur.com/projects/codeReckon/papers/The-Emperors-Old-Clothes.pdf",
+      "published": "1980-10-27",
+      "tags": [
+        "Engineering",
+        "Complexity",
         "Tony Hoare"
       ]
     },
@@ -1255,4 +1307,3 @@
     }
   ]
 }
-

@@ -1,9 +1,42 @@
 {
   "People": [
     {
+      "title": "The Mythical Man-Month: Essays on Software Engineering by Frederick P. Brooks Jr.",
+      "url": "https://en.wikipedia.org/wiki/The_Mythical_Man-Month",
+      "published": "1975-01-01",
+      "tags": [
+        "People",
+        "Engineering Management",
+        "Leadership",
+        "Book"
+      ]
+    },
+    {
+      "title": "Peopleware: Productive Projects and Teams by Tom DeMarco, Timothy Lister",
+      "url": "https://en.wikipedia.org/wiki/Peopleware:_Productive_Projects_and_Teams",
+      "published": "1987-01-01",
+      "tags": [
+        "People",
+        "Engineering Management",
+        "Leadership",
+        "Book"
+      ]
+    },
+    {
+      "title": "The Manager's Path: A Guide for Tech Leaders Navigating Growth and Change by Camille Fournier",
+      "url": "https://www.oreilly.com/library/view/the-managers-path/9781491973882/",
+      "published": "2017-01-01",
+      "tags": [
+        "People",
+        "Engineering Management",
+        "Leadership",
+        "Book"
+      ]
+    },
+    {
       "title": "The Phoenix Project: a novel about IT and DevOps",
       "url": "https://itrevolution.com/product/the-phoenix-project/",
-      "published": null,
+      "published": "2013-01-10",
       "tags": [
         "People",
         "Engineering Management",
@@ -986,7 +1019,7 @@
     {
       "title": "How to Conduct a Good Programming Interview",
       "url": "https://www.lihaoyi.com/post/HowtoconductagoodProgrammingInterview.html",
-      "published": null,
+      "published": "2017-08-30",
       "tags": [
         "People",
         "Interviews",
@@ -1011,7 +1044,7 @@
     {
       "title": "Guy Kawasaki: The Inside Scoop (Pragmatic Resume and Interview Prep)",
       "url": "https://guykawasaki.com/the_inside_scoo/",
-      "published": null,
+      "published": "2006-08-14",
       "tags": [
         "People",
         "Interviewing",
@@ -1020,9 +1053,46 @@
       ]
     },
     {
+      "title": "Storytelling in Interviews with the STARR Method",
+      "url": "https://www.youtube.com/watch?v=cJEEPTyHJDg",
+      "published": "2025-03-18",
+      "tags": [
+        "People",
+        "Interviewing",
+        "Career Development",
+        "Podcast"
+      ]
+    },
+    {
+      "title": "Meta Hiring Lead Austen McDonald - Recruiter learnings from hundreds of FAANG interviews",
+      "url": "https://www.youtube.com/watch?v=nOapM8i5jr0",
+      "published": "2026-03-16",
+      "tags": [
+        "People",
+        "Interviewing",
+        "Career Development",
+        "Podcast"
+      ]
+    },
+    {
+      "title": "Managing Up Show: What am I even paid to do - Ego Identity and the AI Reckoning",
+      "url": "https://www.managingup.show/episodes/what-am-i-even-paid-to-do",
+      "alternate-url": "https://podcasts.apple.com/us/podcast/what-am-i-even-paid-to-do-ego-identity-and-the-ai-reckoning/id1412411569?i=1000766650513",
+      "published": "2026-05-07",
+      "tags": [
+        "People",
+        "Management",
+        "Leadership",
+        "Change Management",
+        "AI",
+        "Podcast"
+      ]
+    },
+    {
       "title": "Managing Up Show: Actually Managing Up",
       "url": "https://www.managingup.show/episodes/actually-managing-up",
-      "published": null,
+      "alternate-url": "https://podcasts.apple.com/us/podcast/actually-managing-up/id1412411569?i=1000586413393",
+      "published": "2022-11-16",
       "tags": [
         "People",
         "Managing Up",
@@ -1386,10 +1456,12 @@
     {
       "title": "Code Review in Remote Teams",
       "url": "https://web.hypothes.is/blog/code-review-in-remote-teams/",
-      "published": null,
+      "published": "2016-11-18",
       "tags": [
         "People",
+        "Engineering"
         "Code Review",
+        "Quality"
         "Remote",
         "Team",
         "Process",
@@ -1543,9 +1615,20 @@
       ]
     },
     {
-      "title": "What to Do After a Layoff",
-      "url": "https://art19.com/shows/well-adjusting/episodes/d3b14bac-def7-4054-a3e7-fdc21e42ee6b",
-      "published": null,
+      "title": "Well Adjusting Podcast: What to Do After a Layoff",
+      "url": "https://www.youtube.com/watch?v=mA3hPDqUR9E",
+      "published": "2023-11-20",
+      "tags": [
+        "People",
+        "Layoffs",
+        "Career Transition",
+        "Podcast"
+      ]
+    },
+    {
+      "title": "Coaching for Leaders: What to Do After a Layoff",
+      "url": "https://coachingforleaders.com/podcast/what-to-do-after-layoff-scott-anthony-barlow/",
+      "published": "2025-04-27",
       "tags": [
         "People",
         "Layoffs",
@@ -1614,7 +1697,7 @@
         "Podcast"
       ]
     },
-      {
+    {
       "title": "Manager Tools: How to fire someone - well almost - managing performance systematically",
       "url": "https://www.manager-tools.com/2006/02/how-to-fire-someone-well-almost",
       "published": "2006-02-27",
@@ -1625,7 +1708,7 @@
         "Difficult Conversations",
         "Podcast"
       ]
-    },  
+    },
     {
       "title": "Manager Tools: Decisions Not Choices Part 2",
       "url": "https://www.manager-tools.com/2020/10/decisions-not-choices-part-2-hall-fame-guidance",
@@ -1856,4 +1939,3 @@
     }
   ]
 }
-

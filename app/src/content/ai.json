@@ -22,7 +22,7 @@
         "Podcast"
       ]
     },
-      {
+    {
       "title": "Invest Like the Best: The Reality of AI LLM Chat Support - Intercom co-founder Des Traynor",
       "url": "https://www.joincolossus.com/episodes/54663623/traynor-the-reality-of-ai",
       "published": "2023-08-08",
@@ -33,7 +33,7 @@
         "Intercom",
         "Podcast"
       ]
-    },  
+    },
     {
       "title": "Lex Fridman: Gustav Soderstrom on AI in Spotify Music",
       "url": "https://lexfridman.com/gustav-soderstrom/",
@@ -41,6 +41,16 @@
       "tags": [
         "AI",
         "Machine Learning",
+        "Podcast"
+      ]
+    },
+    {
+      "title": "Biography of Demis Hassabis co-founder of DeepMind",
+      "url": "https://youtube.com/watch?v=QnpPY5ubgPU",
+      "published": "2026-04-03",
+      "tags": [
+        "AI",
+        "LLM",
         "Podcast"
       ]
     },
@@ -74,7 +84,7 @@
         "LLM",
         "Article"
       ]
-    },    
+    },
     {
       "title": "Invest Like the Best: 2024-03 Aravind Srinivas (founder of Perplexity) on Building an Answer Engine",
       "url": "https://joincolossus.com/episode/srinivas-building-an-answer-engine/",
@@ -94,6 +104,16 @@
         "Business",
         "VC",
         "Podcast"
+      ]
+    },
+    {
+      "title": "AI engineer Patrick Dougherty with Practical tips on AI Agents in Production",
+      "url": "https://youtube.com/watch?v=7MiFIhlkBoE&list=PLcfpQ4tk2k0VetQVGT1EqTbcr-qcgbfFs&index=4&pp=iAQB",
+      "published": "2025-02-22",
+      "tags": [
+        "AI",
+        "Agents",
+        "Video"
       ]
     },
     {
@@ -163,7 +183,18 @@
       ]
     },
     {
-      "title": "AI Application Architecture (aka LLM App Stack) patterns",
+      "title": "Defeating Nondeterminism in LLM Inference by ThinkingMachines",
+      "url": "https://thinkingmachines.ai/blog/defeating-nondeterminism-in-llm-inference/",
+      "published": "2025-09-10",
+      "tags": [
+        "AI",
+        "Engineering",
+        "Architecture",
+        "Article"
+      ]
+    },
+    {
+      "title": "A16z on AI Application Architecture (aka LLM App Stack) patterns",
       "url": "https://a16z.com/emerging-architectures-for-llm-applications/",
       "published": "2023-06-20",
       "tags": [
@@ -174,7 +205,7 @@
       ]
     },
     {
-      "title": "LLM App: AI Application Architecture patterns",
+      "title": "GitHub on the LLM App: AI Application Architecture patterns",
       "url": "https://github.blog/ai-and-ml/llms/the-architecture-of-todays-llm-applications/",
       "published": "2023-10-30",
       "tags": [
@@ -182,6 +213,87 @@
         "Engineering",
         "Architecture",
         "Article"
+      ]
+    },
+    {
+      "title": "Inference optimization using speculative decoding - spending more infra and inference to guess at probabilistic tokens",
+      "url": "https://research.google/blog/looking-back-at-speculative-decoding/",
+      "published": "2024-12-06",
+      "tags": [
+        "AI",
+        "LLM",
+        "Engineering",
+        "Architecture",
+        "Article"
+      ]
+    },
+    {
+      "title": "SE Radio interviews Sahaj Garg CTO of wispr.ai on low latency voice AI",
+      "url": "https://se-radio.net/2026/01/se-radio-703-sahaj-garg-on-low-latency-ai/",
+      "published": "2026-01-14",
+      "tags": [
+        "AI",
+        "LLM",
+        "Engineering",
+        "CTO",
+        "Podcast"
+      ]
+    },
+    {
+      "title": "Pragmatic Engineer interviews Grady Booch on the third golden age of software engineering - AI",
+      "url": "https://youtube.com/watch?v=OfMAtaocvJw&pp=0gcJCcQBo7VqN5tD",
+      "published": "2026-02-04",
+      "tags": [
+        "AI",
+        "LLM",
+        "Engineering",
+        "History",
+        "Video"
+      ]
+    },
+    {
+      "title": "Simply manage your context - like not leaving debug logs on in prod",
+      "url": "https://www.humanlayer.dev/blog/context-efficient-backpressure",
+      "published": "2025-12-09",
+      "tags": [
+        "AI",
+        "Coding",
+        "Agents",
+        "Blog"
+      ]
+    },
+    {
+      "title": "Slow down the agentic accelerated complexity by Mario Zechner of Pi fame",
+      "url": "https://mariozechner.at/posts/2026-03-25-thoughts-on-slowing-the-fuck-down/",
+      "published": "2026-03-25",
+      "tags": [
+        "AI",
+        "Coding",
+        "Agents",
+        "Blog"
+      ]
+    },
+    {
+      "title": "Learn Generative AI: Evaluation and Monitoring for LLM Systems",
+      "url": "https://www.youtube.com/watch?v=cvp5IHPw-ME",
+      "published": "2026-05-13",
+      "tags": [
+        "AI",
+        "LLM",
+        "Observability",
+        "Agents",
+        "Video"
+      ]
+    },
+    {
+      "title": "Agents are Just While Loops with Hamza Tahir (ZenML)",
+      "url": "https://podcasts.apple.com/us/podcast/agents-are-just-while-loops/id1505372978?i=1000767970107",
+      "published": "2026-05-15",
+      "tags": [
+        "AI",
+        "LLM",
+        "Agents",
+        "Podcast"
       ]
     }
   ]
