@@ -4,6 +4,7 @@ import {
   Alert,
   Box,
   Button,
+  CircularProgress,
   Container,
   Divider,
   Link as MuiLink,
@@ -201,6 +202,15 @@ function ChatExperience({ links }) {
             </Box>
           </Stack>
         </Box>
+
+        {submitting ? (
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
+            <CircularProgress size={20} />
+            <Typography variant="body2" color="text.secondary">
+              Getting recommendations...
+            </Typography>
+          </Box>
+        ) : null}
 
         {error ? (
           <Alert severity="error" sx={{ mb: 3 }}>

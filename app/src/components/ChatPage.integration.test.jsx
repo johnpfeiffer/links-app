@@ -174,4 +174,40 @@ describe("ChatPage integration", () => {
     await cleanup();
     globalThis.fetch = originalFetch;
   });
+
+  it("shows a spinner while waiting for the chat response", async () => {
+    let resolveFetch;
+    const fetchMock = vi.fn(
+      () =>
+        new Promise((resolve) => {
+          resolveFetch = resolve;
+        })
+    );
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = fetchMock;
+
+    const { container, cleanup } = await renderChatRoute();
+
+    await submit(container, "I want AI links");
+
+    expect(container.textContent).toContain("Getting recommendations...");
+    expect(container.querySelector(".MuiCircularProgress-root")).not.toBeNull();
+
+    await act(async () => {
+      resolveFetch({
+        ok: true,
+        json: async () => ({
+          message: JSON.stringify({
+            recommendations: [{ linkIds: ["ai-1"] }],
+          }),
+        }),
+      });
+    });
+
+    expect(container.textContent).not.toContain("Getting recommendations...");
+    expect(container.textContent).toContain("A practical AI systems essay");
+
+    await cleanup();
+    globalThis.fetch = originalFetch;
+  });
 });
