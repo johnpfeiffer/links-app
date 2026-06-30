@@ -108,9 +108,9 @@ A chat recommendation must:
 - not include the same link more than once in the same recommendation.
 - provide the recommended link attributes exactly as loaded; chat must not mutate link data, create links, rewrite titles, rewrite URLs, rewrite tags, rewrite `published`, rewrite `description`, or rewrite `alternate-url`.
 
-Chat session state must expose a visible recommendation count. A session allows at most `2` recommendation answers. When the visible recommendation count reaches `2`, new request submission is disabled and chat is disabled.
+Chat session state must expose a visible recommendation count. A session allows at most `3` recommendation answers. When the visible recommendation count reaches `3`, new request submission is disabled and chat is disabled.
 
-The initial backend integration is a Worker endpoint at `/links/chat` for the deployed `links` app namespace. The MVP security boundary is:
+The backend integration is a Worker endpoint at `/links/chat` for the deployed `links` app namespace. The MVP security boundary is:
 
 - React SPA calls the Worker endpoint.
 - Worker allows only exact-origin CORS requests for the hosting origin or explicitly configured allowed origins.
@@ -133,6 +133,18 @@ Derived from requirements v1 through v4:
 - show each link description as a clickable URL with tags below.
 - clicking a disabled tag appends that tag slug to the URL.
 - clicking an enabled tag removes that slug from the URL.
+- below Sources navigation, show `Ask for Recommendations` linking to `/:app/_chat` when an app name is present and `/_chat` when the app name is empty.
+
+### Chat View
+
+Derived from requirements v7:
+
+- route namespace: `/_chat`, after any application name when present.
+- provide navigation back to the Links View.
+- show intro text above the freeform text box: `Ask for recommendations based on a top or scenario...`.
+- show the visible recommendation count near the Send button.
+- disable chat after `3` recommendation answers.
+- preserve the backend API route `POST /links/chat`.
 
 ### Sources View
 

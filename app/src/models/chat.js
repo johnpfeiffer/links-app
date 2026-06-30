@@ -1,5 +1,5 @@
 export const CHAT_API_PATH = "/links/chat";
-export const MAX_CHAT_RECOMMENDATION_ANSWERS = 2;
+export const MAX_CHAT_RECOMMENDATION_ANSWERS = 3;
 const WORKER_MESSAGE_LIMIT = 8_000;
 const PROMPT_HEADROOM = 400;
 

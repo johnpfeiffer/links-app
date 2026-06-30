@@ -99,7 +99,7 @@ async function submit(container, message) {
 }
 
 describe("ChatPage integration", () => {
-  it("builds the links navigation for root and app-prefixed hidden routes", async () => {
+  it("builds the links navigation for root and app-prefixed chat routes", async () => {
     const rootRoute = await renderChatRoute("/_chat");
     const rootBackLink = Array.from(rootRoute.container.querySelectorAll("a")).find(
       (anchor) => anchor.textContent?.trim() === "Back to links"
@@ -139,7 +139,10 @@ describe("ChatPage integration", () => {
         headers: { "Content-Type": "application/json" },
       })
     );
-    expect(container.textContent).toContain("Recommendations used: 1 / 2");
+    expect(container.textContent).toContain(
+      "Ask for recommendations based on a top or scenario..."
+    );
+    expect(container.textContent).toContain("Recommendations used: 1 / 3");
     expect(container.textContent).toContain("A practical AI systems essay");
     expect(container.textContent).not.toContain("missing");
 
@@ -147,7 +150,7 @@ describe("ChatPage integration", () => {
     globalThis.fetch = originalFetch;
   });
 
-  it("disables submissions after two recommendation answers", async () => {
+  it("disables submissions after three recommendation answers", async () => {
     const fetchMock = vi.fn(async () => ({
       ok: true,
       json: async () => ({
@@ -163,12 +166,13 @@ describe("ChatPage integration", () => {
 
     await submit(container, "first");
     await submit(container, "second");
+    await submit(container, "third");
 
     const button = Array.from(container.querySelectorAll("button")).find(
       (candidate) => candidate.textContent === "Send"
     );
-    expect(fetchMock).toHaveBeenCalledTimes(2);
-    expect(container.textContent).toContain("Recommendations used: 2 / 2");
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+    expect(container.textContent).toContain("Recommendations used: 3 / 3");
     expect(button.disabled).toBe(true);
 
     await cleanup();

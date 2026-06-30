@@ -6,7 +6,7 @@ import {
   useNavigate,
   useRouteLoaderData,
 } from "react-router-dom";
-import { Box, Button, Container, Paper, Typography } from "@mui/material";
+import { Box, Button, Container, Paper, Stack, Typography } from "@mui/material";
 import { parseUrlPath } from "../lib/parseUrlPath";
 import { collectTags, filterLinksByTags } from "../models/links";
 import { buildTagsPath } from "../models/tags";
@@ -27,6 +27,11 @@ function buildSourcesPath(app, tags = []) {
     segments.push(encodeURIComponent(tag.key));
   });
   return `/${segments.join("/")}`;
+}
+
+function buildChatPath(app) {
+  const trimmedApp = String(app ?? "").trim();
+  return trimmedApp ? `/${encodeURIComponent(trimmedApp)}/_chat` : "/_chat";
 }
 
 export default function HomePage() {
@@ -60,14 +65,24 @@ export default function HomePage() {
             <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 600 }}>
               John's favorite links
             </Typography>
-            <Button
-              component={RouterLink}
-              to={buildSourcesPath(app, tags)}
-              variant="outlined"
-              size="small"
-            >
-              Sources
-            </Button>
+            <Stack spacing={1} sx={{ alignItems: "flex-end" }}>
+              <Button
+                component={RouterLink}
+                to={buildSourcesPath(app, tags)}
+                variant="outlined"
+                size="small"
+              >
+                Sources
+              </Button>
+              <Button
+                component={RouterLink}
+                to={buildChatPath(app)}
+                variant="contained"
+                size="small"
+              >
+                Ask for Recommendations
+              </Button>
+            </Stack>
           </Box>
           <Typography variant="body2" color="text.secondary" gutterBottom>
             A hand picked list of links for podcasts, blogs, and resources for Software Engineers, People Managers, and people who love to learn =)

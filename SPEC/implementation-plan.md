@@ -40,7 +40,9 @@ Use concise table-driven tests where practical.
 | Sources | links sort by published date ascending, null last | sort expanded source members by normalized published value |
 | Chat recommendations | response references an unknown or duplicate link id | validate recommendations against loaded link ids before rendering |
 | Chat recommendations | response includes altered link attributes | resolve recommended links from loaded link data, not generated payload data |
-| Chat count | two recommendation answers already exist | disable submit and chat controls at count `2` |
+| Chat count | three recommendation answers already exist | disable submit and chat controls at count `3` |
+| Chat navigation | Links View is visible without chat entry point | show `Ask for Recommendations` below Sources and link to `/:app/_chat` |
+| Chat counter placement | recommendation count appears away from Send controls | show `Recommendations used` once near Send |
 | Chat worker CORS | disallowed origin or unexpected requested header calls `/links/chat` | reject preflight/request without wildcard CORS headers |
 
 ## 3. Architecture Plan
@@ -85,7 +87,7 @@ flowchart TD
   L --> M["Worker accepts exact-origin request"]
   M --> N["Recommendations resolve back to existing links"]
   N --> O["Visible count increments"]
-  O --> P["At two answers chat submission is disabled"]
+  O --> P["At three answers chat submission is disabled"]
 ```
 
 ## 5. Validation Gates

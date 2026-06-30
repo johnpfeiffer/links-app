@@ -62,5 +62,5 @@ A Source count equals the count of member Links. Only Sources with count greater
 
 ## INV-018: Chat sessions have a maximum number of recommendations
 - There is a Count of Recommendations visible
-- At the max of 2 recommendation answers during Chat, the ability to submit a new request is disabled, chatting is disabled
+- At the max of 3 recommendation answers during Chat, the ability to submit a new request is disabled, chatting is disabled
 

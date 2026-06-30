@@ -145,7 +145,7 @@ SourceMembers(source) ==
 
 SourceCount(source) == Cardinality(SourceMembers(source))
 
-ChatRecommendationAnswerMax == 2
+ChatRecommendationAnswerMax == 3
 
 RecommendedLinksForIds(linkIds) ==
   { link \in links : link.id \in linkIds }
@@ -307,7 +307,7 @@ INV017 ==
       RecommendedLinksForIds(recommendation.linkIds)
 
 \* INV-018: chat sessions visibly count recommendation answers and disable new
-\* chat submissions at the maximum of two recommendation answers.
+\* chat submissions at the maximum of three recommendation answers.
 INV018 ==
   /\ visibleChatRecommendationCount = Cardinality(chatRecommendations)
   /\ visibleChatRecommendationCount <= ChatRecommendationAnswerMax

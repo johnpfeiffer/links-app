@@ -20,7 +20,7 @@ An index of great learning resources - applicable for career development in soft
 - `src/lib/`: app helpers (`parseUrlPath`).
 - `src/models/`: data models and collection helpers (`tag.js`, `tags.js`, `link.js`, `links.js`).
 - `src/content/`: JSON data sources loaded at runtime.
-- Hidden chat MVP: UI route `/_chat` or `/:app/_chat`; backend API route `POST /links/chat`.
+- Chat recommendations: Links View route `/_chat` or `/:app/_chat`; backend API route `POST /links/chat`.
 
 ## Content Schema
 
@@ -83,9 +83,10 @@ flowchart TD
   I --> J[AllTagsSection<br/>tag list]
   I --> K[LinksSection<br/>filters and count]
   K --> L[LinksList<br/>render items]
-  C --> M[ChatPage.jsx<br/>hidden route]
-  M --> N[chat model helper<br/>prompt and validation]
+  G --> M[Ask for Recommendations]
+  M --> P[ChatPage.jsx<br/>recommendations route]
+  P --> N[chat model helper<br/>prompt and validation]
   N --> O[Cloudflare Worker<br/>POST /links/chat]
 ```
 
-See `architecture.md` for the hidden chat system and user journey diagrams.
+See `architecture.md` for the chat recommendations system and user journey diagrams.

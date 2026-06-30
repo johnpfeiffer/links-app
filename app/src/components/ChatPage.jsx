@@ -90,10 +90,6 @@ function ChatExperience({ links }) {
   const [submitting, setSubmitting] = useState(false);
   const recommendationCount = turns.length;
   const disabled = chatIsDisabled(recommendationCount);
-  const remainingCount = Math.max(
-    MAX_CHAT_RECOMMENDATION_ANSWERS - recommendationCount,
-    0
-  );
   const sortedLinks = useMemo(() => (Array.isArray(links) ? links : []), [links]);
 
   async function handleSubmit(event) {
@@ -172,13 +168,13 @@ function ChatExperience({ links }) {
               Back to links
             </Button>
           </Box>
-          <Typography variant="body2" color="text.secondary">
-            Recommendations used: {recommendationCount} / {MAX_CHAT_RECOMMENDATION_ANSWERS}
-          </Typography>
         </Box>
 
         <Box component="form" onSubmit={handleSubmit} sx={{ mb: 3 }}>
           <Stack spacing={2}>
+            <Typography variant="body2" color="text.secondary">
+              Ask for recommendations based on a top or scenario...
+            </Typography>
             <TextField
               label="Ask for links"
               value={message}
@@ -197,7 +193,7 @@ function ChatExperience({ links }) {
                 Send
               </Button>
               <Typography variant="body2" color="text.secondary">
-                {remainingCount} remaining
+                Recommendations used: {recommendationCount} / {MAX_CHAT_RECOMMENDATION_ANSWERS}
               </Typography>
             </Box>
           </Stack>

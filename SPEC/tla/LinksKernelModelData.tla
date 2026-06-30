@@ -98,12 +98,27 @@ ChatRecommendationsMax == {
         alternateUrl |-> ""
       ]
     }
+  ],
+  [
+    id |-> "recommendation-3",
+    linkIds |-> {"link-3"},
+    recommendedLinks |-> {
+      [
+        id |-> "link-3",
+        url |-> "not a url",
+        title |-> "People History",
+        tags |-> {"People", "History"},
+        published |-> ModelNull,
+        description |-> "People History",
+        alternateUrl |-> ""
+      ]
+    }
   ]
 }
 
 VisibleChatRecommendationCountNone == 0
 
-VisibleChatRecommendationCountMax == 2
+VisibleChatRecommendationCountMax == 3
 
 ChatSubmitEnabledTrue == TRUE
 

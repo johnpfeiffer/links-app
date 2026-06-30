@@ -72,10 +72,11 @@ describe("chat prompt and session limits", () => {
   });
 
   it("disables chat at the maximum recommendation count", () => {
-    assert.equal(MAX_CHAT_RECOMMENDATION_ANSWERS, 2);
+    assert.equal(MAX_CHAT_RECOMMENDATION_ANSWERS, 3);
     assert.equal(chatIsDisabled(0), false);
     assert.equal(chatIsDisabled(1), false);
-    assert.equal(chatIsDisabled(2), true);
+    assert.equal(chatIsDisabled(2), false);
     assert.equal(chatIsDisabled(3), true);
+    assert.equal(chatIsDisabled(4), true);
   });
 });

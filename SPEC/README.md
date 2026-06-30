@@ -6,6 +6,7 @@ This directory is AI-derived from `/KERNEL/` and is not authoritative. If any st
 
 - `/KERNEL/AGENTS.md`
 - `/KERNEL/INVARIANTS.md`
+- `/KERNEL/DESIGN.md`
 - `/KERNEL/README.md`
 - `/KERNEL/docs/requirements-v1.md`
 - `/KERNEL/docs/requirements-v2.md`
@@ -13,6 +14,7 @@ This directory is AI-derived from `/KERNEL/` and is not authoritative. If any st
 - `/KERNEL/docs/requirements-v4.md`
 - `/KERNEL/docs/requirements-v5.md`
 - `/KERNEL/docs/requirements-v6.md`
+- `/KERNEL/docs/requirements-v7.md`
 - `/KERNEL/pyproject.toml`
 - `/KERNEL/uv.lock`
 
@@ -48,7 +50,7 @@ The current kernel invariants define:
 - `INV-015`: Every link has a non-empty trimmed `description` with published year suffix behavior.
 - `INV-016`: Every link has `alternate-url`, either a URL or an empty string.
 - `INV-017`: Chat recommendations are grounded in existing links only, do not duplicate links within a recommendation, and do not mutate link data.
-- `INV-018`: Chat sessions expose recommendation count and disable new chat requests at `2` recommendation answers.
+- `INV-018`: Chat sessions expose recommendation count and disable new chat requests at `3` recommendation answers.
 
 ## Scope Note
 

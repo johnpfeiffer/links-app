@@ -251,6 +251,17 @@ describe("HomePage Sources navigation", () => {
     await cleanup();
   });
 
+  it("shows Recommendations navigation when the application name is empty", async () => {
+    const { container, cleanup } = await renderActualHomePageAtPath("/tags");
+    const chatLink = Array.from(container.querySelectorAll("a")).find(
+      (anchor) => anchor.textContent?.trim() === "Ask for Recommendations"
+    );
+
+    expect(chatLink?.getAttribute("href")).toBe("/_chat");
+
+    await cleanup();
+  });
+
   it("preserves app name and selected tags in Sources navigation", async () => {
     const { container, cleanup } = await renderActualHomePageAtPath("/links/tags/ai");
     const sourcesLink = Array.from(container.querySelectorAll("a")).find(
@@ -258,6 +269,17 @@ describe("HomePage Sources navigation", () => {
     );
 
     expect(sourcesLink?.getAttribute("href")).toBe("/links/sources/ai");
+
+    await cleanup();
+  });
+
+  it("preserves app name in Recommendations navigation", async () => {
+    const { container, cleanup } = await renderActualHomePageAtPath("/links/tags/ai");
+    const chatLink = Array.from(container.querySelectorAll("a")).find(
+      (anchor) => anchor.textContent?.trim() === "Ask for Recommendations"
+    );
+
+    expect(chatLink?.getAttribute("href")).toBe("/links/_chat");
 
     await cleanup();
   });
