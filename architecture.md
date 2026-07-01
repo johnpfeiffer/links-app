@@ -41,7 +41,7 @@ sequenceDiagram
   Gemini-->>Worker: JSON recommendation text
   Worker-->>ChatPage: message and interaction id
   ChatPage->>ChatPage: Parse link ids and validate against loaded links
-  ChatPage-->>User: Show grounded recommendations
+  ChatPage-->>User: Show newest grounded recommendations first
   ChatPage->>ChatPage: Disable after 3 recommendation answers
 ```
 
@@ -50,3 +50,4 @@ sequenceDiagram
 - `INV-017`: Chat renders only recommendations whose link ids resolve to currently loaded links. Unknown ids and duplicate ids inside a recommendation are dropped before display.
 - `INV-018`: Chat displays `Recommendations used: N / 3` near the Send button and disables new submissions after three successful recommendation answers.
 - Requirements v7: The Links View exposes `Ask for Recommendations` below Sources navigation and routes users to `/:app/_chat`.
+- Chat UI behavior: New recommendation answers are prepended above older answers so the newest response stays nearest the request controls.

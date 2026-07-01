@@ -179,6 +179,40 @@ describe("ChatPage integration", () => {
     globalThis.fetch = originalFetch;
   });
 
+  it("renders the newest recommendation answer before older answers", async () => {
+    const responseLinkIds = ["ai-1", "eng-1"];
+    const fetchMock = vi.fn(async () => {
+      const linkId = responseLinkIds.shift();
+
+      return {
+        ok: true,
+        json: async () => ({
+          message: JSON.stringify({
+            recommendations: [{ linkIds: [linkId] }],
+          }),
+        }),
+      };
+    });
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = fetchMock;
+
+    const { container, cleanup } = await renderChatRoute();
+
+    await submit(container, "older request");
+    await submit(container, "newer request");
+
+    const pageText = container.textContent;
+    expect(pageText.indexOf("newer request")).toBeLessThan(
+      pageText.indexOf("older request")
+    );
+    expect(pageText.indexOf("A software leadership talk")).toBeLessThan(
+      pageText.indexOf("A practical AI systems essay")
+    );
+
+    await cleanup();
+    globalThis.fetch = originalFetch;
+  });
+
   it("shows a spinner while waiting for the chat response", async () => {
     let resolveFetch;
     const fetchMock = vi.fn(

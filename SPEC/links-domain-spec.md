@@ -143,6 +143,7 @@ Derived from requirements v7:
 - provide navigation back to the Links View.
 - show intro text above the freeform text box: `Ask for recommendations based on a top or scenario...`.
 - show the visible recommendation count near the Send button.
+- show the newest recommendation answer above older answers so recent responses stay closest to the request controls.
 - disable chat after `3` recommendation answers.
 - preserve the backend API route `POST /links/chat`.
 

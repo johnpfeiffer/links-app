@@ -129,12 +129,12 @@ function ChatExperience({ links }) {
       }
 
       setTurns((current) => [
-        ...current,
         {
           id: `${Date.now()}-${current.length}`,
           question: trimmedMessage,
           recommendations,
         },
+        ...current,
       ]);
       setMessage("");
 
