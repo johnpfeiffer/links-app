@@ -21,6 +21,26 @@ flowchart TD
   Validate --> Render["Render only existing link attributes"]
 ```
 
+## Type-Safety Gates
+
+The application is authored in TypeScript with strict compiler settings in `app/tsconfig.json`.
+Untrusted remote content and chat responses enter as `unknown` and are narrowed before use; static
+types complement rather than replace those runtime checks.
+
+```mermaid
+flowchart LR
+  Content["Remote or bundled JSON"] --> Unknown["unknown input"]
+  Api["Chat API response"] --> Unknown
+  Unknown --> Narrow["Runtime record checks"]
+  Narrow --> Models["Typed Link / Tag / Chat contracts"]
+  Models --> Ui["Typed React component props and state"]
+  Models --> Tests["Vitest tests"]
+  Ui --> Compile["tsc --project tsconfig.json"]
+  Tests --> Check["npm run check"]
+  Compile --> Check
+  Check --> Build["Vite production build"]
+```
+
 The visible chat UI route is separate from `/links/chat` because `/links/chat` is the Cloudflare Worker API route in the imported backend example. The UI is reachable from the Links View at `/_chat` for a root-hosted app and `/:app/_chat` for app-prefixed hosting, such as `/links/_chat`.
 
 ## Chat Journey
@@ -55,4 +75,4 @@ sequenceDiagram
 
 ## Global Footer
 
-`app/src/components/Footer.jsx` is a pure presentational component rendered once in `App.jsx` (inside the `ThemeProvider`, after the `RouterProvider`) so it appears on every route. It shows a "Built by John Pfeiffer" line with LinkedIn and GitHub source-link icons (`@mui/icons-material`); the GitHub link points at this repository. Covered by `Footer.test.jsx` (jsdom, `createRoot` + `act`).
+`app/src/components/Footer.tsx` is a pure presentational component rendered once in `App.tsx` (inside the `ThemeProvider`, after the `RouterProvider`) so it appears on every route. It shows a "Built by John Pfeiffer" line with LinkedIn and GitHub source-link icons (`@mui/icons-material`); the GitHub link points at this repository. Covered by `Footer.test.tsx` (jsdom, `createRoot` + `act`).

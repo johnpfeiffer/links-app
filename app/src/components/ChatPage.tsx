@@ -13,17 +13,19 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { parseUrlPath } from "../lib/parseUrlPath.js";
+import { parseUrlPath } from "../lib/parseUrlPath";
 import {
   CHAT_API_PATH,
   MAX_CHAT_RECOMMENDATION_ANSWERS,
   buildChatPrompt,
   chatIsDisabled,
   parseChatRecommendations,
-} from "../models/chat.js";
-import Loading from "./Loading.jsx";
+} from "../models/chat";
+import Loading from "./Loading";
+import { isJsonRecord } from "../types";
+import type { ChatRecommendation, ChatResponse, ChatTurn, LinkRecord, RootLoaderData } from "../types";
 
-function appFromChatPath(pathname) {
+function appFromChatPath(pathname: string): string {
   const segments = pathname.split("/").filter(Boolean);
 
   if (segments[0] === "_chat") {
@@ -32,29 +34,35 @@ function appFromChatPath(pathname) {
 
   if (segments[1] === "_chat") {
     try {
-      return decodeURIComponent(segments[0]);
+      return decodeURIComponent(segments[0] ?? "");
     } catch {
-      return segments[0];
+      return segments[0] ?? "";
     }
   }
 
   return parseUrlPath(pathname).app;
 }
 
-function buildTagsPath(app) {
+function buildTagsPath(app: string): string {
   const trimmedApp = String(app ?? "").trim();
   return trimmedApp ? `/${encodeURIComponent(trimmedApp)}/tags` : "/tags";
 }
 
-async function readResponseJson(response) {
+async function readResponseJson(response: Response): Promise<ChatResponse> {
   try {
-    return await response.json();
+    const payload: unknown = await response.json();
+    if (!isJsonRecord(payload)) return {};
+    return {
+      ...(typeof payload.message === "string" ? { message: payload.message } : {}),
+      ...(typeof payload.interactionId === "string" ? { interactionId: payload.interactionId } : {}),
+      ...(typeof payload.error === "string" ? { error: payload.error } : {}),
+    };
   } catch {
     return {};
   }
 }
 
-function RecommendationLinks({ recommendations }) {
+function RecommendationLinks({ recommendations }: { recommendations: ChatRecommendation[] }) {
   return (
     <Stack spacing={2}>
       {recommendations.map((recommendation, recommendationIndex) => (
@@ -80,11 +88,11 @@ function RecommendationLinks({ recommendations }) {
   );
 }
 
-function ChatExperience({ links }) {
+function ChatExperience({ links }: { links: LinkRecord[] }) {
   const location = useLocation();
   const app = appFromChatPath(location.pathname);
   const [message, setMessage] = useState("");
-  const [turns, setTurns] = useState([]);
+  const [turns, setTurns] = useState<ChatTurn[]>([]);
   const [previousInteractionId, setPreviousInteractionId] = useState("");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -92,7 +100,7 @@ function ChatExperience({ links }) {
   const disabled = chatIsDisabled(recommendationCount);
   const sortedLinks = useMemo(() => (Array.isArray(links) ? links : []), [links]);
 
-  async function handleSubmit(event) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
     const trimmedMessage = message.trim();
 
@@ -142,7 +150,7 @@ function ChatExperience({ links }) {
         setPreviousInteractionId(body.interactionId.trim());
       }
     } catch (caught) {
-      setError(caught?.message || "Chat request failed");
+      setError(caught instanceof Error ? caught.message : "Chat request failed");
     } finally {
       setSubmitting(false);
     }
@@ -232,13 +240,13 @@ function ChatExperience({ links }) {
 }
 
 export default function ChatPage() {
-  const loaderData = useRouteLoaderData("root");
+  const loaderData = useRouteLoaderData("root") as RootLoaderData | undefined;
   const links = loaderData?.links ?? [];
 
   return (
     <Suspense fallback={<Loading message="Loading chat..." />}>
       <Await resolve={links}>
-        {(loadedLinks) => <ChatExperience links={loadedLinks} />}
+        {(loadedLinks: LinkRecord[]) => <ChatExperience links={loadedLinks} />}
       </Await>
     </Suspense>
   );

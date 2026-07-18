@@ -9,8 +9,13 @@ import {
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { buildTagTogglePath, isTagEnabled } from "../models/tags";
+import type { LinkRecord, TagRecord } from "../types";
 
-export default function LinksList({ app, enabledTags, links }) {
+export default function LinksList({ app, enabledTags, links }: {
+  app: string;
+  enabledTags: TagRecord[];
+  links: LinkRecord[];
+}) {
   if (links.length === 0) {
     return (
       <Typography variant="body2" color="text.secondary">

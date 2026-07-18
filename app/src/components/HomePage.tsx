@@ -14,8 +14,9 @@ import FavoriteTagsSection from "./FavoriteTagsSection";
 import AllTagsSection from "./AllTagsSection";
 import LinksSection from "./LinksSection";
 import Loading from "./Loading";
+import type { LinkRecord, RootLoaderData, TagRecord } from "../types";
 
-function buildSourcesPath(app, tags = []) {
+function buildSourcesPath(app: string, tags: readonly TagRecord[] = []): string {
   const segments = [];
   const trimmedApp = String(app ?? "").trim();
   if (trimmedApp) {
@@ -29,7 +30,7 @@ function buildSourcesPath(app, tags = []) {
   return `/${segments.join("/")}`;
 }
 
-function buildChatPath(app) {
+function buildChatPath(app: string): string {
   const trimmedApp = String(app ?? "").trim();
   return trimmedApp ? `/${encodeURIComponent(trimmedApp)}/_chat` : "/_chat";
 }
@@ -37,7 +38,7 @@ function buildChatPath(app) {
 export default function HomePage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const loaderData = useRouteLoaderData("root");
+  const loaderData = useRouteLoaderData("root") as RootLoaderData | undefined;
   const links = loaderData?.links ?? [];
   const { app, tags } = parseUrlPath(location.pathname);
 
@@ -90,7 +91,7 @@ export default function HomePage() {
         </Box>
         <Suspense fallback={<Loading message="Loading categories and links..." />}>
           <Await resolve={links}>
-            {(loadedLinks) => {
+            {(loadedLinks: LinkRecord[]) => {
               const allTags = collectTags(loadedLinks);
               const tagByKey = new Map(allTags.map((tag) => [tag.key, tag]));
               const enabledTags = tags.map((tag) => tagByKey.get(tag.key) ?? tag);

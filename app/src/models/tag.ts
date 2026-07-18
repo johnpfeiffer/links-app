@@ -1,24 +1,29 @@
-export class Tag {
-  constructor({ label, key }) {
+import type { TagRecord } from "../types";
+
+export class Tag implements TagRecord {
+  label: string;
+  key: string;
+
+  constructor({ label, key }: TagRecord) {
     this.label = label;
     this.key = key;
   }
 
-  static normalizeLabel(value) {
+  static normalizeLabel(value: unknown): string {
     if (typeof value !== "string") return "";
     const stripped = value.replace(/[^a-zA-Z0-9\s-]/g, " ");
     const spaces = stripped.replace(/-+/g, " ");
     return spaces.trim().replace(/\s+/g, " ");
   }
 
-  static fromLabel(value) {
+  static fromLabel(value: unknown): Tag | null {
     const label = Tag.normalizeLabel(value);
     if (!label) return null;
     const key = label.toLowerCase().replace(/\s+/g, "-");
     return new Tag({ label, key });
   }
 
-  static fromSlug(value) {
+  static fromSlug(value: unknown): Tag | null {
     if (typeof value !== "string") return null;
     let decoded = value;
     try {

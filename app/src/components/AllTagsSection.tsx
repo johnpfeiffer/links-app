@@ -13,8 +13,13 @@ import {
   buildTagTogglePath,
   isTagEnabled,
 } from "../models/tags";
+import type { TagRecord } from "../types";
 
-export default function AllTagsSection({ app, enabledTags, tags }) {
+export default function AllTagsSection({ app, enabledTags, tags }: {
+  app: string;
+  enabledTags: TagRecord[];
+  tags: TagRecord[];
+}) {
   const [tagsExpanded, setTagsExpanded] = useState(false);
 
   return (
