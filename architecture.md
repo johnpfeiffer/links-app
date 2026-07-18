@@ -7,6 +7,7 @@ This document records derived implementation facts. `/KERNEL/` remains the autho
 ```mermaid
 flowchart TD
   User["User opens recommendations"] --> Home["HomePage<br/>Links View"]
+  User --> Footer["Global Footer<br/>built-by + LinkedIn/GitHub source links"]
   Home --> UI["React ChatPage<br/>/_chat or /:app/_chat"]
   UI --> Loader["Root loader<br/>Link.loadAll"]
   Loader --> Links["Existing normalized links"]
@@ -51,3 +52,7 @@ sequenceDiagram
 - `INV-018`: Chat displays `Recommendations used: N / 3` near the Send button and disables new submissions after three successful recommendation answers.
 - Requirements v7: The Links View exposes `Ask for Recommendations` below Sources navigation and routes users to `/:app/_chat`.
 - Chat UI behavior: New recommendation answers are prepended above older answers so the newest response stays nearest the request controls.
+
+## Global Footer
+
+`app/src/components/Footer.jsx` is a pure presentational component rendered once in `App.jsx` (inside the `ThemeProvider`, after the `RouterProvider`) so it appears on every route. It shows a "Built by John Pfeiffer" line with LinkedIn and GitHub source-link icons (`@mui/icons-material`); the GitHub link points at this repository. Covered by `Footer.test.jsx` (jsdom, `createRoot` + `act`).

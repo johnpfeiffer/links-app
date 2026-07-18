@@ -3,6 +3,7 @@ import { RouterProvider, createBrowserRouter, defer, Outlet } from "react-router
 import ChatPage from "./components/ChatPage";
 import HomePage from "./components/HomePage";
 import SourcesPage from "./components/SourcesPage";
+import Footer from "./components/Footer";
 import { Link } from "./models/link.js";
 
 let linksPromise;
@@ -80,6 +81,7 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <RouterProvider router={router} />
+      <Footer />
     </ThemeProvider>
   );
 }
