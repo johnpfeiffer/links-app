@@ -4,11 +4,12 @@ import ChatPage from "./components/ChatPage";
 import HomePage from "./components/HomePage";
 import SourcesPage from "./components/SourcesPage";
 import Footer from "./components/Footer";
-import { Link } from "./models/link.js";
+import { Link } from "./models/link";
+import type { LinkRecord } from "./types";
 
-let linksPromise;
+let linksPromise: Promise<LinkRecord[]> | undefined;
 
-function loadLinksOnce() {
+function loadLinksOnce(): Promise<LinkRecord[]> {
   if (!linksPromise) {
     linksPromise = Link.loadAll();
   }

@@ -14,9 +14,9 @@ An index of great learning resources - applicable for career development in soft
 - `index.html`: HTML entry point.
 - `package.json`: dependencies and scripts.
 - `vite.config.js`: Vite build configuration.
-- `src/index.jsx`: app entry point (mounts React).
-- `src/App.jsx`: router + theme; wires the top-level routes.
-- `src/components/`: UI modules (e.g., `HomePage.jsx`, `SourcesPage.jsx`, `LinksSection.jsx`).
+- `src/index.tsx`: app entry point (mounts React).
+- `src/App.tsx`: router + theme; wires the top-level routes.
+- `src/components/`: UI modules (e.g., `HomePage.tsx`, `SourcesPage.tsx`, `LinksSection.tsx`).
 - `src/lib/`: app helpers (`parseUrlPath`).
 - `src/models/`: data models and collection helpers (`tag.js`, `tags.js`, `link.js`, `links.js`).
 - `src/content/`: JSON data sources loaded at runtime.
@@ -63,7 +63,10 @@ npm run dev
 ```bash
 cd app
 npm test
-npm run test:vitest
+npm run typecheck
+npm run build
+# Or run all three gates:
+npm run check
 ```
 
 Also see <https://blog.john-pfeiffer.com/ai-opportunities-need-improved-spec-driven-development-with-tla/>

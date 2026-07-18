@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
+import { describe, it } from "vitest";
 import {
   CHAT_API_PATH,
   MAX_CHAT_RECOMMENDATION_ANSWERS,

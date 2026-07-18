@@ -2,8 +2,13 @@ import { Box, Chip, Divider, Stack, Typography } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { buildTagTogglePath } from "../models/tags";
 import LinksList from "./LinksList";
+import type { LinkRecord, TagRecord } from "../types";
 
-export default function LinksSection({ app, links, enabledTags }) {
+export default function LinksSection({ app, links, enabledTags }: {
+  app: string;
+  links: LinkRecord[];
+  enabledTags: TagRecord[];
+}) {
   return (
     <Box>
       {enabledTags.length > 0 ? (

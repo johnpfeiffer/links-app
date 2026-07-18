@@ -11,8 +11,9 @@ import {
   Typography,
 } from "@mui/material";
 import { filterLinksByTags } from "../models/links";
+import type { LinkRecord, SourceStat, TagRecord } from "../types";
 
-function compareLinksByPublished(left, right) {
+function compareLinksByPublished(left: LinkRecord, right: LinkRecord): number {
   const leftPublished = left?.published ?? null;
   const rightPublished = right?.published ?? null;
 
@@ -32,13 +33,13 @@ function compareLinksByPublished(left, right) {
   return leftPublished.localeCompare(rightPublished);
 }
 
-export function buildDomainStats(links, selectedTags = []) {
+export function buildDomainStats(links: readonly LinkRecord[], selectedTags: readonly TagRecord[] = []): SourceStat[] {
   if (!Array.isArray(links)) {
     return [];
   }
 
   const includedLinks = filterLinksByTags(links, selectedTags);
-  const domainGroups = new Map();
+  const domainGroups = new Map<string, { domain: string; links: LinkRecord[] }>();
 
   includedLinks.forEach((link) => {
     const rawUrl = typeof link?.url === "string" ? link.url.trim() : "";
@@ -77,14 +78,17 @@ export function buildDomainStats(links, selectedTags = []) {
     });
 }
 
-export default function SourcesSection({ links, selectedTags = [] }) {
-  const [expandedDomains, setExpandedDomains] = useState(() => new Set());
+export default function SourcesSection({ links, selectedTags = [] }: {
+  links: LinkRecord[];
+  selectedTags?: TagRecord[];
+}) {
+  const [expandedDomains, setExpandedDomains] = useState<Set<string>>(() => new Set());
   const domainStats = useMemo(
     () => buildDomainStats(links, selectedTags),
     [links, selectedTags]
   );
 
-  const toggleDomain = (domain) => {
+  const toggleDomain = (domain: string) => {
     setExpandedDomains((prev) => {
       const next = new Set(prev);
       if (next.has(domain)) {

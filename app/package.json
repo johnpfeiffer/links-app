@@ -7,14 +7,16 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "node --test",
-    "test:vitest": "vitest run src/models/link.vitest.test.jsx src/components/AllTagsSection.integration.test.jsx src/components/FavoriteTagsSection.test.jsx src/components/HomePage.integration.test.jsx src/components/SourcesSection.test.jsx src/components/SourcesPage.integration.test.jsx src/components/ChatPage.integration.test.jsx src/components/Footer.test.jsx"
+    "test": "vitest run",
+    "test:vitest": "vitest run",
+    "typecheck": "tsc --project tsconfig.json",
+    "check": "npm run typecheck && npm test && npm run build"
   },
   "dependencies": {
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
-    "@mui/icons-material": "^5.18.0",
-    "@mui/material": "^5.15.15",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^9.2.0",
+    "@mui/material": "^9.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.20.0"
@@ -24,6 +26,7 @@
     "@types/react-dom": "^18.2.0",
     "@vitejs/plugin-react": "^6.0.2",
     "jsdom": "^27.4.0",
+    "typescript": "^7.0.2",
     "vite": "^8.0.16",
     "vitest": "^4.1.8"
   }

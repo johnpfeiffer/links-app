@@ -10,10 +10,11 @@ import { parseUrlPath } from "../lib/parseUrlPath";
 import { buildTagsPath } from "../models/tags";
 import Loading from "./Loading";
 import SourcesSection from "./SourcesSection";
+import type { LinkRecord, RootLoaderData } from "../types";
 
 export default function SourcesPage() {
   const location = useLocation();
-  const loaderData = useRouteLoaderData("root");
+  const loaderData = useRouteLoaderData("root") as RootLoaderData | undefined;
   const links = loaderData?.links ?? [];
   const { app, tags } = parseUrlPath(location.pathname);
   const homePath = buildTagsPath(app, []);
@@ -33,7 +34,7 @@ export default function SourcesPage() {
         </Box>
         <Suspense fallback={<Loading message="Loading sources..." />}>
           <Await resolve={links}>
-            {(loadedLinks) => (
+            {(loadedLinks: LinkRecord[]) => (
               <SourcesSection links={loadedLinks} selectedTags={tags} />
             )}
           </Await>

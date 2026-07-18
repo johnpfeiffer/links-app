@@ -1,9 +1,11 @@
-export function isTagEnabled(enabledTags, tag) {
+import type { TagRecord } from "../types";
+
+export function isTagEnabled(enabledTags: readonly TagRecord[], tag: TagRecord | null | undefined): boolean {
   if (!tag || !tag.key) return false;
   return enabledTags.some((enabledTag) => enabledTag.key === tag.key);
 }
 
-export function buildTagsPath(app, tags) {
+export function buildTagsPath(app: string | null | undefined, tags: readonly TagRecord[]): string {
   const segments = [];
   const trimmedApp = String(app ?? "").trim();
 
@@ -21,7 +23,11 @@ export function buildTagsPath(app, tags) {
   return `/${segments.join("/")}`;
 }
 
-export function buildTagTogglePath(app, enabledTags, tag) {
+export function buildTagTogglePath(
+  app: string | null | undefined,
+  enabledTags: readonly TagRecord[] | null | undefined,
+  tag: TagRecord | null | undefined
+): string {
   const currentTags = Array.isArray(enabledTags) ? enabledTags : [];
   if (!tag || !tag.key) return buildTagsPath(app, currentTags);
 

@@ -1,8 +1,13 @@
 
-export function filterLinksByTags(links, tags) {
-  if (!tags || tags.length === 0) return links;
+import type { LinkRecord, TagRecord } from "../types";
+
+export function filterLinksByTags(
+  links: readonly LinkRecord[],
+  tags: readonly TagRecord[] | null | undefined
+): LinkRecord[] {
+  if (!tags || tags.length === 0) return [...links];
   const normalizedTags = tags.map((tag) => tag?.key).filter(Boolean);
-  if (normalizedTags.length === 0) return links;
+  if (normalizedTags.length === 0) return [...links];
 
   return links.filter((link) => {
     const tagSet = new Set(link.tags.map((tag) => tag.key));
@@ -10,8 +15,8 @@ export function filterLinksByTags(links, tags) {
   });
 }
 
-export function collectTags(links) {
-  const tagMap = new Map();
+export function collectTags(links: readonly LinkRecord[]): TagRecord[] {
+  const tagMap = new Map<string, TagRecord>();
   links.forEach((link) => {
     link.tags.forEach((tag) => {
       const key = tag?.key;
