@@ -190,7 +190,7 @@ function ChatExperience({ links }: { links: LinkRecord[] }) {
               multiline
               minRows={3}
               disabled={disabled || submitting}
-              inputProps={{ maxLength: 500 }}
+              slotProps={{ htmlInput: { maxLength: 500 } }}
             />
             <Box sx={{ display: "flex", alignItems: "center", gap: 2, flexWrap: "wrap" }}>
               <Button
